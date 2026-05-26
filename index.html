@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OBISL Campus - Module 3: Business Ethics & Professionalism</title>
+  <!-- Tailwind CSS Play CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- React and Babel CDNs -->
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  
+  <!-- MathJax Configuration for dynamic LaTeX rendering -->
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']]
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+      }
+    };
+  </script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Noto+Sans+Sinhala:wght@300;400;500;600;700;800&display=swap');
+    
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+    .font-sinhala {
+      font-family: 'Noto Sans Sinhala', sans-serif;
+    }
+    
+    /* Smooth Scroll and Visual Transitions */
+    .transition-all-200 {
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Scrollbar Styling */
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: rgba(15, 23, 42, 0.6);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(16, 185, 129, 0.2);
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(16, 185, 129, 0.4);
+    }
+
+    /* Print Optimization styling */
+    @media print {
+      body {
+        background: #ffffff !important;
+        color: #000000 !important;
+      }
+      .no-print {
+        display: none !important;
+      }
+      .print-container {
+        display: block !important;
+        width: 100% !important;
+        background: white !important;
+        color: black !important;
+        box-shadow: none !important;
+        border: none !important;
+      }
+    }
+  </style>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#ecfdf5',
+              100: '#d1fae5',
+              400: '#34d399',
+              500: '#10b981',
+              600: '#059669',
+              900: '#064e3b',
+              950: '#022c22',
+            },
+            tech: {
+              400: '#60a5fa',
+              500: '#3b82f6',
+              600: '#2563eb',
+              950: '#172554',
+            }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen relative overflow-x-hidden selection:bg-brand-500 selection:text-slate-950">
+
+  <!-- Ambient background glow behind the UI -->
+  <div class="absolute top-10 left-10 w-96 h-96 bg-brand-900/10 rounded-full blur-[120px] pointer-events-none z-0"></div>
+  <div class="absolute bottom-20 right-10 w-80 h-80 bg-tech-500/10 rounded-full blur-[100px] pointer-events-none z-0"></div>
+
+  <!-- React Root Container -->
+  <div id="root" class="relative z-10"></div>
+
+  <!-- React Application -->
+  <script type="text/babel">
+
+    // Standalone Custom SVG Icons
+    const IconCase = () => (
+      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" /></svg>
+    );
+    const IconSroi = () => (
+      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v5.625c0 .621-.504 1.125-1.125 1.125h-2.25A1.125 1.125 0 013 18.75v-5.625zM16.5 13.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 12 21 12.504 21 13.125v5.625c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125v-5.625zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v10.125c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM3 16.5h18" /></svg>
+    );
+    const IconCarbon = () => (
+      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M12 3v18m9-9H3m12-9a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+    );
+    const IconChat = () => (
+      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M8.625 12a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 01-2.555-.337A5.972 5.972 0 015.41 20.97a.75.75 0 01-1.074-.765 5.99 5.99 0 011.523-4.238C4.593 14.713 3 12.213 3 9.75 3 5.194 7.03 1.5 12 1.5s9 3.694 9 8.25z" /></svg>
+    );
+    const IconPrint = () => (
+      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0110.56 0m-10.56 0L6.34 18m10.94-4.171c.24.03.48.062.72.096m-.72-.096L17.66 18m0 0l.229 1.503a.75.75 0 01-.741.864H6.852a.75.75 0 01-.741-.864L6.34 18m11.32 0h-11.32M9 10.5h.008v.008H9V10.5zm3 0h.008v.008H12V10.5zm3 0h.008v.008H15V10.5z" /></svg>
+    );
+    const IconArrow = () => (
+      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5"><path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" /></svg>
+    );
+    const IconHelp = () => (
+      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z" /></svg>
+    );
+
+    function App() {
+      const [activeTab, setActiveTab] = React.useState('case');
+      const [showGlossary, setShowGlossary] = React.useState(false);
+      
+      // Global simulation state variables driven by sliders
+      // SROI Parameters
+      const [vFin, setVFin] = React.useState(100);       // Financial Value ($ Millions)
+      const [vSoc, setVSoc] = React.useState(75);        // Monetized Social Value ($ Millions)
+      const [vEnv, setVEnv] = React.useState(45);        // Monetized Environmental Value ($ Millions)
+      const [iTot, setITot] = React.useState(120);       // Total Investment ($ Millions)
+
+      // CFA Parameters
+      const [eEmbed, setEEmbed] = React.useState(300);   // Embedded Carbon Cost (tCO2e)
+      const [eSavings, setESavings] = React.useState(60); // Annual Carbon Savings (tCO2e/year)
+      const [eMaint, setEMaint] = React.useState(15);    // Annual Upkeep footprint (tCO2e/year)
+
+      // Active Case Study selections
+      const [selectedChipAction, setSelectedChipAction] = React.useState(null);
+      const [selectedGridAction, setSelectedGridAction] = React.useState(null);
+
+      // SROI Mathematical calculation
+      const sroiResult = ((vFin + vSoc + vEnv) / iTot).toFixed(2);
+
+      // CFA Mathematical calculation
+      const carbonDifference = eSavings - eMaint;
+      const cfaResult = carbonDifference > 0 ? (eEmbed / carbonDifference).toFixed(1) : 'Infinity';
+
+      // Automatic state updates when users select case study paths (connecting theory to calculations)
+      const applyRecallDecision = (choice) => {
+        setSelectedChipAction(choice);
+        if (choice === 'ethical') {
+          // Dr. Elena Vance's decision: Protect people and planet, take short-term financial hit
+          setVFin(40);     // Low immediate financial return
+          setVSoc(120);    // High social benefit / trust preserved
+          setVEnv(90);     // High environmental protection / recycled safely
+          setITot(100);    // Minimal operational cost inflation
+        } else {
+          // Arthur Sterling's decision: Cover up, ship defective chips immediately to hit quarterly targets
+          setVFin(150);    // High short-term financial gain
+          setVSoc(10);     // Low trust
+          setVEnv(5);      // Environmental threat neglected
+          setITot(110);    // Cost tracking inflation
+        }
+      };
+
+      const applyUpgradeDecision = (choice) => {
+        setSelectedGridAction(choice);
+        if (choice === 'solar') {
+          // Renewable Solar Upgrade
+          setEEmbed(220);   // Modest manufacturing footprint
+          setESavings(75);  // Outstanding annual emission reduction
+          setEMaint(10);    // Minimal continuous emissions
+        } else {
+          // Budget Coal/Gas Upgrade
+          setEEmbed(450);   // Heavy initial infrastructure footprint
+          setESavings(20);  // Low carbon offsetting performance
+          setEMaint(40);    // High runtime upkeep emissions
+        }
+      };
+
+      // Hook to trigger MathJax typeset updates on state transitions safely
+      React.useEffect(() => {
+        if (window.MathJax && window.MathJax.typesetPromise) {
+          window.MathJax.typesetPromise().catch((err) => {
+            console.warn("MathJax typesetting warning:", err);
+          });
+        }
+      }, [vFin, vSoc, vEnv, iTot, eEmbed, eSavings, eMaint, activeTab]);
+
+      // Handler for printing/exporting
+      const handlePrint = () => {
+        window.print();
+      };
+
+      return (
+        <div className="flex flex-col lg:flex-row min-h-screen">
+          
+          {/* Decoupled Left Sidebar (Navigation & Session Progress) */}
+          <aside className="w-full lg:w-80 bg-slate-900/95 border-r border-slate-800 p-6 flex flex-col justify-between shrink-0 no-print lg:sticky lg:top-0 lg:h-screen">
+            <div>
+              {/* Institutional Branding */}
+              <div className="mb-6">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-400 to-blue-500 flex items-center justify-center font-extrabold text-slate-950 text-2xl shadow-lg shadow-brand-500/20">
+                    Ω
+                  </div>
+                  <div>
+                    <h1 className="text-sm font-black tracking-wider text-white">OBISL CAMPUS</h1>
+                    <span className="text-[10px] text-brand-400 font-bold tracking-widest block -mt-1">PRACTICUM PORTAL</span>
+                  </div>
+                </div>
+                <div className="mt-4 p-3.5 rounded-xl bg-slate-950/80 border border-slate-800">
+                  <p className="text-xs font-bold text-slate-200">M3: Business Ethics & Professionalism</p>
+                  <span className="text-[10px] text-slate-400 italic font-sinhala block mt-0.5">ව්‍යාපාරික ආචාර ධර්ම සහ වෘත්තීයවේදය</span>
+                </div>
+              </div>
+
+              {/* Navigation Tabs */}
+              <nav className="space-y-1.5">
+                {[
+                  { id: 'case', label: '1. Case Connections', sin: 'සිද්ධි සම්බන්ධතා', icon: <IconCase /> },
+                  { id: 'sroi', label: '2. SROI Impact Lab', sin: 'තිරසාර ROI විශ්ලේෂණය', icon: <IconSroi /> },
+                  { id: 'cfa', label: '3. CFA Carbon Lab', sin: 'කාබන් පියවීම් විශ්ලේෂණය', icon: <IconCarbon /> },
+                  { id: 'breakout', label: '4. Breakout Challenges', sin: 'සාකච්ඡා සහ වෘත්තීයවේදය', icon: <IconChat /> },
+                ].map((tab) => (
+                  <button
+                    key={tab.id}
+                    type="button"
+                    onClick={() => setActiveTab(tab.id)}
+                    className={`w-full flex items-center gap-3.5 px-4 py-3.5 rounded-xl transition-all duration-150 text-left cursor-pointer relative z-40 ${
+                      activeTab === tab.id
+                        ? 'bg-gradient-to-r from-brand-900/40 to-slate-900 border-l-4 border-brand-500 text-brand-400 font-semibold shadow-inner'
+                        : 'text-slate-400 hover:text-white hover:bg-slate-800/40'
+                    }`}
+                  >
+                    <span className={activeTab === tab.id ? 'text-brand-400' : 'text-slate-500'}>
+                      {tab.icon}
+                    </span>
+                    <div>
+                      <span className="text-xs block tracking-wide">{tab.label}</span>
+                      <span className="text-[9px] text-slate-500 font-sinhala italic block leading-tight">{tab.sin}</span>
+                    </div>
+                  </button>
+                ))}
+              </nav>
+
+              {/* Glossary Trigger Card */}
+              <div className="mt-6 p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] font-mono text-slate-400 font-bold uppercase tracking-wider">Metric Explanations</span>
+                  <span className="w-2 h-2 rounded-full bg-blue-400"></span>
+                </div>
+                <p className="text-[11px] text-slate-300">Confused about terms like <strong className="text-blue-400">tCO2e</strong> or <strong className="text-emerald-400">SROI</strong>?</p>
+                <button
+                  type="button"
+                  onClick={() => setShowGlossary(!showGlossary)}
+                  className="w-full flex items-center justify-center gap-1.5 bg-blue-900/30 hover:bg-blue-900/50 border border-blue-500/30 text-blue-400 py-1.5 px-2 rounded-lg text-[10px] font-bold tracking-wider transition-all cursor-pointer relative z-40"
+                >
+                  <IconHelp />
+                  <span>{showGlossary ? 'HIDE EXPLAINERS' : 'SHOW EXPLAINERS'}</span>
+                </button>
+              </div>
+            </div>
+
+            {/* Sidebar Action Block */}
+            <div className="pt-4 border-t border-slate-800 mt-4">
+              <button
+                type="button"
+                onClick={handlePrint}
+                className="w-full flex items-center justify-center gap-2 bg-slate-800 hover:bg-brand-500 hover:text-slate-950 text-slate-300 py-2.5 px-3 rounded-xl text-xs font-bold transition-all cursor-pointer relative z-40 shadow-md"
+              >
+                <IconPrint />
+                <span>EXPORT TO PDF / PRINT</span>
+              </button>
+              <div className="mt-2.5 text-center text-[9px] text-slate-500 font-mono">
+                CBMS Practicum Engine v2.2
+              </div>
+            </div>
+          </aside>
+
+          {/* Main Visual Learning Sandbox */}
+          <main className="flex-1 p-4 lg:p-8 flex flex-col justify-between print-container overflow-y-auto h-screen max-h-screen">
+            
+            {/* Header displaying active context with Persistent HUD Scoreboard */}
+            <header className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-800 mb-6 no-print">
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="px-2 py-0.5 rounded text-[10px] bg-brand-500/10 text-brand-400 border border-brand-500/20 font-mono uppercase">CBMS STUDY SESSION</span>
+                  <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></div>
+                  <span className="text-xs text-slate-400 font-mono">LIVE SYSTEMS ALIGNMENT</span>
+                </div>
+                <h2 className="text-xl font-bold tracking-tight text-white mt-1">Module 3: Business Ethics & Professionalism</h2>
+                <p className="text-xs text-slate-400 font-sinhala italic">මොඩියුලය 3: ව්‍යාපාරික ආචාර ධර්ම සහ වෘත්තීයවේදය • OBISL Campus</p>
+              </div>
+
+              {/* Persistent Dynamic HUD Scoreboard */}
+              <div className="flex items-center gap-4 bg-slate-900/60 px-4 py-2.5 rounded-xl border border-slate-800 shrink-0">
+                <div className="text-right border-r border-slate-850 pr-4">
+                  <span className="text-[10px] font-mono text-slate-400 block uppercase font-bold tracking-wider">LIVE SROI</span>
+                  <span className={`text-lg font-black font-mono leading-tight block ${Number(sroiResult) >= 1.5 ? 'text-brand-400' : Number(sroiResult) >= 1.0 ? 'text-amber-400' : 'text-red-400 animate-pulse'}`}>
+                    {sroiResult}x
+                  </span>
+                  <span className="text-[9px] text-slate-500 block font-sinhala">තිරසාර ROI</span>
+                </div>
+                <div className="text-right">
+                  <span className="text-[10px] font-mono text-slate-400 block uppercase font-bold tracking-wider">CFA PAYBACK</span>
+                  <span className={`text-lg font-black font-mono leading-tight block ${cfaResult === 'Infinity' || Number(cfaResult) > 8.0 ? 'text-amber-400 animate-pulse' : 'text-brand-400'}`}>
+                    {cfaResult} {cfaResult === 'Infinity' ? '' : 'Yrs'}
+                  </span>
+                  <span className="text-[9px] text-slate-500 block font-sinhala">කාබන් පියවීම</span>
+                </div>
+              </div>
+            </header>
+
+            {/* TAB CONTENT SPACES */}
+            <div className="flex-1">
+
+              {/* GLOSSARY OVERLAY CARD */}
+              {showGlossary && (
+                <div className="mb-6 p-5 rounded-2xl bg-slate-900 border border-blue-500/30 text-xs animate-slideDown space-y-4 shadow-xl relative z-30">
+                  <div className="flex justify-between items-center border-b border-slate-800 pb-2">
+                    <span className="font-bold text-blue-400 uppercase tracking-widest flex items-center gap-2">
+                      <IconHelp /> Student-Friendly Metric Explanations
+                    </span>
+                    <button 
+                      type="button"
+                      onClick={() => setShowGlossary(false)} 
+                      className="text-slate-400 hover:text-white font-bold cursor-pointer"
+                    >
+                      ✕ Close
+                    </button>
+                  </div>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    
+                    {/* explaining tCO2e */}
+                    <div className="space-y-1 bg-slate-950 p-3 rounded-xl border border-slate-850">
+                      <span className="font-bold text-blue-400 uppercase tracking-wider block">tCO2e</span>
+                      <p className="text-slate-300 leading-normal">
+                        <strong>Tonnes of Carbon Dioxide Equivalent:</strong> The global standard metric used to measure and compare total Greenhouse Gas (GHG) emissions.
+                      </p>
+                      <p className="text-slate-400 italic text-[11px] leading-normal pt-1 border-t border-slate-900">
+                        <strong>Sinhala:</strong> කාබන් ඩයොක්සයිඩ් සමාන මෙට්‍රික් ටොන් (විමෝචන ප්‍රමාණය මනින ඒකකය).
+                      </p>
+                      <span className="text-[10px] text-brand-400 italic block pt-1 font-semibold">
+                        💡 Analogy: 1 tCO2e is like burning 425 liters of gasoline.
+                      </span>
+                    </div>
+
+                    {/* explaining SROI */}
+                    <div className="space-y-1 bg-slate-950 p-3 rounded-xl border border-slate-850">
+                      <span className="font-bold text-emerald-400 uppercase tracking-wider block">Sustainable SROI</span>
+                      <p className="text-slate-300 leading-normal">
+                        <strong>Social Return on Investment:</strong> Traditional ROI only measures dollars. SROI translates social trust and clean-air contributions into dollar terms, adding them to direct revenue.
+                      </p>
+                      <p className="text-slate-400 italic text-[11px] leading-normal pt-1 border-t border-slate-900">
+                        <strong>Sinhala:</strong> තිරසාර හෝ සමාජීය ආයෝජන ප්‍රතිලාභය (සමාජීය හා පාරිසරික වටිනාකම් මනින ක්‍රමය).
+                      </p>
+                      <span className="text-[10px] text-brand-400 italic block pt-1 font-semibold">
+                        💡 Threshold: An SROI score &gt; 1.0x means society gets back more than you spent.
+                      </span>
+                    </div>
+
+                    {/* explaining CFA */}
+                    <div className="space-y-1 bg-slate-950 p-3 rounded-xl border border-slate-850">
+                      <span className="font-bold text-teal-400 uppercase tracking-wider block">CFA Payback</span>
+                      <p className="text-slate-300 leading-normal">
+                        <strong>Carbon Footprint Amortization:</strong> Manufacturing green technology (like solar panels) creates carbon footprint. CFA calculates how many years it takes for annual savings to pay back this initial carbon debt.
+                      </p>
+                      <p className="text-slate-400 italic text-[11px] leading-normal pt-1 border-t border-slate-900">
+                        <strong>Sinhala:</strong> කාබන් පියසටහන් පියවීමේ කාලසීමාව (මූලික කාබන් ණය මුදල පියවීමට ගතවන කාලය).
+                      </p>
+                      <span className="text-[10px] text-brand-400 italic block pt-1 font-semibold">
+                        💡 Goal: A smaller payback period is always better!
+                      </span>
+                    </div>
+
+                  </div>
+                </div>
+              )}
+
+              {/* TAB 1: CASE CONNECTIONS */}
+              {activeTab === 'case' && (
+                <div className="space-y-6 animate-fadeIn">
+                  <div className="p-5 rounded-2xl bg-gradient-to-r from-brand-900/20 to-slate-900/50 border border-brand-500/20">
+                    <h3 className="text-lg font-bold text-slate-100">Step 1: Link Ethical Decisions to Real Numbers</h3>
+                    <p className="text-xs text-slate-300 mt-1">
+                      Choose an action in each of the short case studies below. Your selections will instantly load real-world metrics into the **SROI** and **CFA** laboratories on the next tabs!
+                    </p>
+                    <span className="text-xs text-slate-400 italic font-sinhala font-medium block mt-1">
+                      පහත දැක්වෙන සිද්ධි අධ්‍යයන සඳහා සුදුසු තීරණය තෝරන්න. එය ඊළඟ ටැබ් වල ඇති SROI සහ CFA ගණක යන්ත්‍ර ස්වයංක්‍රීයව වෙනස් කරනු ඇත.
+                    </span>
+                  </div>
+
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    
+                    {/* CASE STUDY A: Aegis-9 Microchip recall */}
+                    <div className="p-5 rounded-xl bg-slate-900/60 border border-slate-800 flex flex-col justify-between">
+                      <div>
+                        <div className="flex items-center justify-between">
+                          <span className="text-[10px] bg-red-500/10 text-red-400 px-2.5 py-0.5 rounded font-mono font-bold">CASE A: THE AEGIS-9 CRISIS</span>
+                          <span className="text-xs text-slate-500 font-mono">NexusCore Technologies</span>
+                        </div>
+                        <h4 className="text-sm font-bold text-slate-200 mt-3">Dr. Elena Vance discovers Aegis-9 chips suffer severe thermal leaks under heavy processing loads. Shipping them immediately preserves immediate $150M revenue but puts lives at risk.</h4>
+                        <span className="text-xs text-slate-500 italic font-sinhala font-medium block mt-2">
+                          ප්‍රොසෙසරයේ ඇති තාප කාන්දු වීමේ දෝෂය හෙළිදරව් කර ව්‍යාපෘතිය නවත්වනවාද, නැතහොත් ලාභය තකා එය පාරිභෝගිකයාගෙන් වසන් කරනවාද?
+                        </span>
+                      </div>
+
+                      <div className="mt-6 space-y-2">
+                        <button 
+                          type="button"
+                          onClick={() => applyRecallDecision('ethical')}
+                          className={`w-full p-3.5 rounded-xl text-left border transition-all cursor-pointer ${selectedChipAction === 'ethical' ? 'bg-brand-950/40 border-brand-500 shadow-md' : 'bg-slate-950 hover:bg-slate-900 border-slate-850'}`}
+                        >
+                          <div className="flex justify-between items-center">
+                            <span className="font-bold text-brand-400 text-xs">Path A1: Ethical Disclosure & Full Recycle</span>
+                            <span className="text-[9px] bg-brand-500/15 text-brand-400 px-2 py-0.5 rounded font-mono font-bold">TBL Standard</span>
+                          </div>
+                          <p className="text-[11px] text-slate-300 mt-1">Sacrifice short-term revenue to maintain long-term consumer trust. Recycle defective metal stock.</p>
+                          <span className="text-[9px] text-slate-500 font-sinhala italic block mt-1">පාරිභෝගික සුරක්ෂිතතාවය තෝරාගෙන කෙටි කාලීන මූල්‍ය පාඩුව විඳ දරාගැනීම.</span>
+                        </button>
+
+                        <button 
+                          type="button"
+                          onClick={() => applyRecallDecision('unethical')}
+                          className={`w-full p-3.5 rounded-xl text-left border transition-all cursor-pointer ${selectedChipAction === 'unethical' ? 'bg-red-950/20 border-red-500/40 shadow-md' : 'bg-slate-950 hover:bg-slate-900 border-slate-850'}`}
+                        >
+                          <div className="flex justify-between items-center">
+                            <span className="font-bold text-red-400 text-xs">Path A2: Conceal & Deploy Silent Firmware Patch</span>
+                            <span className="text-[9px] bg-red-500/10 text-red-400 px-2 py-0.5 rounded font-mono font-bold">Profit Focus</span>
+                          </div>
+                          <p className="text-[11px] text-slate-300 mt-1">Ship anyway. Quietly limit processor performance by 15% to avoid explosions, deceiving customers.</p>
+                          <span className="text-[9px] text-slate-500 font-sinhala italic block mt-1">දෝෂය වසා දමා රහසිගත මෘදුකාංග යාවත්කාලීන මඟින් කාර්ය සාධනය අඩු කිරීම.</span>
+                        </button>
+                      </div>
+
+                      {selectedChipAction && (
+                        <div className="mt-4 p-3 bg-slate-950 rounded-lg border border-slate-800 text-[11px] space-y-2 animate-fadeIn">
+                          <div className="flex justify-between items-center">
+                            <span className="text-slate-400">Values linked to SROI Lab:</span>
+                            <span className="text-brand-400 font-bold font-mono">
+                              {selectedChipAction === 'ethical' ? 'V_fin = $40M, V_soc = $120M, V_env = $90M, I_tot = $100M' : 'V_fin = $150M, V_soc = $10M, V_env = $5M, I_tot = $110M'}
+                            </span>
+                          </div>
+                          <div className="pt-2 border-t border-slate-850 flex justify-between items-center">
+                            <span className="text-slate-400">Calculated Decision SROI:</span>
+                            <span className={`font-bold font-mono text-xs ${selectedChipAction === 'ethical' ? 'text-brand-400' : 'text-red-400'}`}>
+                              {selectedChipAction === 'ethical' ? '2.50x SROI (Strong Balance!)' : '1.50x SROI (Unbalanced/Ethically Vulnerable)'}
+                            </span>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* CASE STUDY B: The Eco-Grid Upgrade */}
+                    <div className="p-5 rounded-xl bg-slate-900/60 border border-slate-800 flex flex-col justify-between">
+                      <div>
+                        <div className="flex items-center justify-between">
+                          <span className="text-[10px] bg-blue-500/10 text-tech-400 px-2.5 py-0.5 rounded font-mono font-bold">CASE B: ECO-EFFICIENCY UPGRADE</span>
+                          <span className="text-xs text-slate-500 font-mono">Production Facility Upgrades</span>
+                        </div>
+                        <h4 className="text-sm font-bold text-slate-200 mt-3">The main factory energy grid must be upgraded to reduce emissions. Selecting high-quality clean technology cuts long-term footprint but demands high initial embedded materials setup.</h4>
+                        <span className="text-xs text-slate-500 italic font-sinhala font-medium block mt-2">
+                          කාබන් විමෝචනය අවම කිරීම සඳහා කර්මාන්තශාලා බලශක්ති පද්ධතිය නවීකරණය කිරීමේ විකල්ප සැසඳීම.
+                        </span>
+                      </div>
+
+                      <div className="mt-6 space-y-2">
+                        <button 
+                          type="button"
+                          onClick={() => applyUpgradeDecision('solar')}
+                          className={`w-full p-3.5 rounded-xl text-left border transition-all cursor-pointer ${selectedGridAction === 'solar' ? 'bg-brand-950/40 border-brand-500 shadow-md' : 'bg-slate-950 hover:bg-slate-900 border-slate-850'}`}
+                        >
+                          <div className="flex justify-between items-center">
+                            <span className="font-bold text-brand-400 text-xs">Path B1: Renewable Solar Smart-Grid Upgrade</span>
+                            <span className="text-[9px] bg-brand-500/15 text-brand-400 px-2 py-0.5 rounded font-mono font-bold">High Offset</span>
+                          </div>
+                          <p className="text-[11px] text-slate-300 mt-1">Excellent carbon offsets. Moderate initial manufacturing footprint, outstanding annual carbon saving rate.</p>
+                          <span className="text-[9px] text-slate-500 font-sinhala italic block mt-1">තිරසාර සූර්ය බලශක්ති පද්ධතියක් ස්ථාපිත කිරීම - උපරිම වාර්ෂික කාබන් ඉතිරියක් ලැබේ.</span>
+                        </button>
+
+                        <button 
+                          type="button"
+                          onClick={() => applyUpgradeDecision('coal')}
+                          className={`w-full p-3.5 rounded-xl text-left border transition-all cursor-pointer ${selectedGridAction === 'coal' ? 'bg-red-950/20 border-red-500/40 shadow-md' : 'bg-slate-950 hover:bg-slate-900 border-slate-850'}`}
+                        >
+                          <div className="flex justify-between items-center">
+                            <span className="font-bold text-red-400 text-xs">Path B2: Standard Gas-Powered Upgrade</span>
+                            <span className="text-[9px] bg-red-500/10 text-red-400 px-2 py-0.5 rounded font-mono font-bold">Fossil Fuel</span>
+                          </div>
+                          <p className="text-[11px] text-slate-300 mt-1">Heavy raw infrastructure footprint. High annual upkeep emissions with poor emission offsetting efficiency.</p>
+                          <span className="text-[9px] text-slate-500 font-sinhala italic block mt-1">සම්මත ගෑස්/අඟුරු බලශක්තිය භාවිතය - මූලික පිරිවැය අඩු වුවද කාබන් විමෝචනය ඉහළය.</span>
+                        </button>
+                      </div>
+
+                      {selectedGridAction && (
+                        <div className="mt-4 p-3 bg-slate-950 rounded-lg border border-slate-800 text-[11px] space-y-2 animate-fadeIn">
+                          <div className="flex justify-between items-center">
+                            <span className="text-slate-400">Values linked to CFA Lab:</span>
+                            <span className="text-brand-400 font-bold font-mono">
+                              {selectedGridAction === 'solar' ? 'E_embed = 220, E_savings = 75, E_maint = 10' : 'E_embed = 450, E_savings = 20, E_maint = 40'}
+                            </span>
+                          </div>
+                          <div className="pt-2 border-t border-slate-850 flex justify-between items-center">
+                            <span className="text-slate-400">Calculated Payback Period:</span>
+                            <span className={`font-bold font-mono text-xs ${selectedGridAction === 'solar' ? 'text-brand-400' : 'text-red-400 animate-pulse'}`}>
+                              {selectedGridAction === 'solar' ? '3.4 Years (Highly Efficient)' : 'Never Pays Back (Fossil Fuel Carbon Trap!)'}
+                            </span>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+
+                  </div>
+
+                  {/* Navigation prompt block */}
+                  <div className="p-4 bg-slate-900 border border-slate-800 rounded-xl flex items-center justify-between text-xs">
+                    <div>
+                      <span className="font-bold text-slate-200">Ready to analyze the SROI and CFA mathematics?</span>
+                      <span className="text-[10px] text-slate-500 font-sinhala italic block">ගණනය කිරීම් සහ ප්‍රායෝගික සූත්‍ර විශ්ලේෂණය සඳහා සූදානම්ද?</span>
+                    </div>
+                    <button 
+                      type="button"
+                      onClick={() => setActiveTab('sroi')}
+                      className="flex items-center gap-2 bg-brand-500 hover:bg-brand-600 text-slate-950 font-bold px-4 py-2 rounded-lg transition-all cursor-pointer"
+                    >
+                      <span>Proceed to SROI Lab</span>
+                      <IconArrow />
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {/* TAB 2: SROI IMPACT LAB */}
+              {activeTab === 'sroi' && (
+                <div className="space-y-6 animate-fadeIn">
+                  
+                  {/* Explanatory introduction card */}
+                  <div className="p-5 rounded-2xl bg-gradient-to-r from-brand-900/20 to-slate-900/50 border border-brand-500/20">
+                    <span className="text-xs text-brand-400 font-bold uppercase tracking-wider block">Social Return on Investment (SROI)</span>
+                    <h3 className="text-lg font-bold text-slate-100">Quantifying Corporate Morality via Triple Bottom Line</h3>
+                    <p className="text-xs text-slate-300 mt-1">
+                      {"Business ethics must go beyond statements. Standard ROI only tracks financial gain ($V_{financial}$). Sustainable ROI (SROI) monetizes and adds Social ($V_{social}$) and Ecological ($V_{environmental}$) values."}
+                    </p>
+                    <span className="text-xs text-slate-400 italic font-sinhala font-medium block mt-1.5">
+                      සාම්ප්‍රදායික මූල්‍ය ප්‍රතිලාභ (ROI) මනින සූත්‍රයෙන් ඔබ්බට යමින්, ව්‍යාපෘතියක් මඟින් සමාජයට (Social) සහ පරිසරයට (Environmental) එක් කරන වටිනාකම් මූල්‍යමය වශයෙන් ගණනය කිරීම මෙහිදී සිදු කෙරේ.
+                    </span>
+                  </div>
+
+                  {/* Interactive SROI Fraction Visualization Area */}
+                  <div className="p-6 rounded-xl bg-slate-900/40 border border-slate-800 flex flex-col items-center justify-center space-y-4">
+                    <span className="text-xs text-slate-400 font-mono font-bold tracking-widest">LIVE SROI FORMULA FRACTION</span>
+                    
+                    <div className="flex items-center gap-4">
+                      {/* Left Side Fraction */}
+                      <div className="flex flex-col items-center">
+                        {/* Numerator */}
+                        <div className="text-sm font-semibold text-slate-300 pb-2 border-b-2 border-slate-700 text-center flex items-center gap-1.5 font-mono">
+                          <span className="text-blue-400 font-bold">${vFin}M</span>
+                          <span>+</span>
+                          <span className="text-emerald-400 font-bold">${vSoc}M</span>
+                          <span>+</span>
+                          <span className="text-teal-400 font-bold">${vEnv}M</span>
+                        </div>
+                        {/* Denominator */}
+                        <div className="text-sm font-semibold text-slate-400 pt-2 text-center font-mono text-purple-400">
+                          ${iTot}M
+                        </div>
+                      </div>
+
+                      {/* Equal Sign */}
+                      <span className="text-2xl font-bold text-slate-400">=</span>
+
+                      {/* Final Result Block */}
+                      <div className="p-3 bg-slate-950 border border-slate-800 rounded-xl text-center">
+                        <span className={`text-3xl font-black font-mono tracking-tight block ${Number(sroiResult) >= 1.5 ? 'text-brand-400' : Number(sroiResult) >= 1.0 ? 'text-amber-400' : 'text-red-400 animate-pulse'}`}>
+                          {sroiResult}x
+                        </span>
+                        <span className="text-[10px] text-slate-500 uppercase tracking-widest font-mono font-bold">SROI RATIO</span>
+                      </div>
+                    </div>
+
+                    <p className="text-xs text-slate-400 text-center max-w-lg font-mono">
+                      {"$$\\text{SROI} = \\frac{V_{\\text{financial}} + V_{\\text{social}} + V_{\\text{environmental}}}{I_{\\text{total}}}$$"}
+                    </p>
+                  </div>
+
+                  {/* Sliders Control Deck */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    
+                    {/* Tweakable Sliders */}
+                    <div className="p-5 rounded-xl bg-slate-900/60 border border-slate-800 space-y-4">
+                      <h4 className="text-xs font-bold text-slate-300 uppercase tracking-widest mb-2">Adjust Values (අගයන් වෙනස් කරන්න)</h4>
+                      
+                      {/* Financial slider */}
+                      <div className="space-y-1">
+                        <div className="flex justify-between text-xs">
+                          <span className="text-slate-300 font-medium">Financial Value Gain (V_financial)</span>
+                          <span className="text-blue-400 font-mono font-bold">${vFin}M</span>
+                        </div>
+                        <input 
+                          type="range" min="5" max="250" value={vFin} 
+                          onChange={(e) => setVFin(Number(e.target.value))} 
+                          className="w-full accent-blue-500 bg-slate-800 rounded-lg h-1.5 cursor-pointer relative z-40" 
+                        />
+                        <span className="text-[10px] text-slate-500 font-sinhala italic block leading-none">කෙටි කාලීන මූල්‍යමය ප්‍රතිලාභය</span>
+                      </div>
+
+                      {/* Social slider */}
+                      <div className="space-y-1">
+                        <div className="flex justify-between text-xs">
+                          <span className="text-slate-300 font-medium">Preserved Social Trust (V_social)</span>
+                          <span className="text-emerald-400 font-mono font-bold">${vSoc}M</span>
+                        </div>
+                        <input 
+                          type="range" min="0" max="200" value={vSoc} 
+                          onChange={(e) => setVSoc(Number(e.target.value))} 
+                          className="w-full accent-brand-500 bg-slate-800 rounded-lg h-1.5 cursor-pointer relative z-40" 
+                        />
+                        <span className="text-[10px] text-slate-500 font-sinhala italic block leading-none">සමාජීය විශ්වාසය සහ වගකීම</span>
+                      </div>
+
+                      {/* Environmental slider */}
+                      <div className="space-y-1">
+                        <div className="flex justify-between text-xs">
+                          <span className="text-slate-300 font-medium">Ecological Stewardship (V_environmental)</span>
+                          <span className="text-teal-400 font-mono font-bold">${vEnv}M</span>
+                        </div>
+                        <input 
+                          type="range" min="0" max="200" value={vEnv} 
+                          onChange={(e) => setVEnv(Number(e.target.value))} 
+                          className="w-full accent-teal-400 bg-slate-800 rounded-lg h-1.5 cursor-pointer relative z-40" 
+                        />
+                        <span className="text-[10px] text-slate-500 font-sinhala italic block leading-none">පරිසර පද්ධතියට සිදු කරන දායකත්වය</span>
+                      </div>
+
+                      {/* Total Investment slider */}
+                      <div className="space-y-1">
+                        <div className="flex justify-between text-xs">
+                          <span className="text-slate-300 font-medium">Total Resource Investment (I_total)</span>
+                          <span className="text-purple-400 font-mono font-bold">${iTot}M</span>
+                        </div>
+                        <input 
+                          type="range" min="50" max="350" value={iTot} 
+                          onChange={(e) => setITot(Number(e.target.value))} 
+                          className="w-full accent-purple-500 bg-slate-800 rounded-lg h-1.5 cursor-pointer relative z-40" 
+                        />
+                        <span className="text-[10px] text-slate-500 font-sinhala italic block leading-none">ව්‍යාපෘතිය සඳහා වැය වන මුළු ප්‍රාග්ධනය</span>
+                      </div>
+                    </div>
+
+                    {/* Mathematical Consequence Explanation */}
+                    <div className="p-5 rounded-xl bg-slate-900/60 border border-slate-800 flex flex-col justify-between">
+                      <div>
+                        <h4 className="text-xs font-bold text-slate-300 uppercase tracking-widest mb-3">Mathematical Audit Analysis</h4>
+                        
+                        {Number(sroiResult) >= 1.5 ? (
+                          <div className="p-4 rounded-xl bg-brand-950/20 border border-brand-500/20 space-y-2 animate-slideUp">
+                            <span className="text-xs font-bold text-brand-400 block uppercase font-mono">🌟 EXCELLENT TRIPLE BOTTOM LINE COMPLIANCE</span>
+                            <p className="text-xs text-slate-300 leading-relaxed">
+                              This project is a sustainable success. The social trust and ecological restoration benefits heavily exceed the initial capital required. Ideal for ESG certification.
+                            </p>
+                            <span className="text-xs text-slate-500 italic font-sinhala font-medium block">
+                              විශිෂ්ට තිරසාරභාවයක් සහිත ව්‍යාපෘතියකි. මූල්‍ය නොවන (සමාජීය සහ පාරිසරික) වටිනාකම් විශාල වශයෙන් සුරැකී ඇත.
+                            </span>
+                          </div>
+                        ) : Number(sroiResult) >= 1.0 ? (
+                          <div className="p-4 rounded-xl bg-amber-950/20 border border-amber-500/20 space-y-2 animate-slideUp">
+                            <span className="text-xs font-bold text-amber-400 block uppercase font-mono">⚖️ MODERATE TRIPLE BOTTOM LINE ALIGNMENT</span>
+                            <p className="text-xs text-slate-300 leading-relaxed">
+                              The project generates value but lacks strong environmental or social buffers. Tweak the sliders to increase social trust or ecology parameters to achieve maximum ESG balance.
+                            </p>
+                            <span className="text-xs text-slate-500 italic font-sinhala font-medium block">
+                              සාමාන්‍ය මට්ටමේ තිරසාරභාවයක් ඇත. පාරිසරික හෝ සමාජීය වටිනාකම් තවත් වැඩි දියුණු කිරීමට උත්සාහ කරන්න.
+                            </span>
+                          </div>
+                        ) : (
+                          <div className="p-4 rounded-xl bg-red-950/20 border border-red-500/20 space-y-2 animate-pulse">
+                            <span className="text-xs font-bold text-red-400 block uppercase font-mono">⚠️ CRITICAL VALUES FAILURE (UNSUSTAINABLE)</span>
+                            <p className="text-xs text-slate-300 leading-relaxed">
+                              Warning! Short-term financial prioritisation has compromised corporate reputation and environmental safety. SROI under 1.0x indicates terminal stakeholder value depletion.
+                            </p>
+                            <span className="text-xs text-slate-500 italic font-sinhala font-medium block">
+                              අනතුරු ඇඟවීමකි! මූල්‍යමය ලාභය පමණක් සලකා කටයුතු කිරීම නිසා සමාජීය හා පාරිසරික අගයන් සම්පූර්ණයෙන්ම විනාශ වී ඇත.
+                            </span>
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="pt-4 border-t border-slate-800 text-xs text-slate-400 leading-relaxed">
+                        <strong>Practical Session Insight:</strong> SROI illustrates that true corporate growth is a three-dimensional equilibrium of People, Planet, and Profit.
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              )}
+
+              {/* TAB 3: CFA CARBON LAB */}
+              {activeTab === 'cfa' && (
+                <div className="space-y-6 animate-fadeIn">
+                  
+                  {/* Explanatory introduction card */}
+                  <div className="p-5 rounded-2xl bg-gradient-to-r from-brand-900/20 to-slate-900/50 border border-brand-500/20">
+                    <span className="text-xs text-brand-400 font-bold uppercase tracking-wider block">Carbon Footprint Amortization (CFA)</span>
+                    <h3 className="text-lg font-bold text-slate-100">Tracking Ecological Payback Periods</h3>
+                    <p className="text-xs text-slate-300 mt-1">
+                      {"Every green technology upgrade requires manufacturing raw resources, which releases carbon up front ($E_{embedded}$). Carbon Footprint Amortization calculates the number of years required for annual emissions savings to pay back this initial debt."}
+                    </p>
+                    <span className="text-xs text-slate-400 italic font-sinhala font-medium block mt-1.5">
+                      කාබන් පියසටහන් පියවීමේ සූත්‍රය මඟින් නව තාක්ෂණික උපාංග නිෂ්පාදනය සඳහා මුලින් වැය වූ කාබන් ප්‍රමාණය, එහි වාර්ෂික ඉතිරිය මඟින් සම්පූර්ණයෙන්ම පියවා ගැනීමට ගත වන වසර ගණන ගණනය කරයි.
+                    </span>
+                  </div>
+
+                  {/* Math Visualization Column */}
+                  <div className="p-5 rounded-xl bg-slate-900/40 border border-slate-800 flex flex-col items-center justify-center space-y-4">
+                    <span className="text-xs text-slate-400 font-mono font-bold tracking-widest">CFA MATHEMATICAL EQUATION</span>
+                    
+                    <div className="flex items-center gap-4">
+                      {/* Left Side Fraction */}
+                      <div className="flex flex-col items-center">
+                        {/* Numerator */}
+                        <div className="text-sm font-semibold text-slate-300 pb-2 border-b-2 border-slate-700 text-center font-mono text-blue-400">
+                          {eEmbed} tCO2e
+                        </div>
+                        {/* Denominator */}
+                        <div className="text-sm font-semibold text-slate-400 pt-2 text-center font-mono text-emerald-400">
+                          ({eSavings} - {eMaint}) tCO2e/year
+                        </div>
+                      </div>
+
+                      {/* Equal Sign */}
+                      <span className="text-2xl font-bold text-slate-400">=</span>
+
+                      {/* Final Result Block */}
+                      <div className="p-3 bg-slate-950 border border-slate-800 rounded-xl text-center">
+                        <span className={`text-3xl font-black font-mono tracking-tight block ${cfaResult === 'Infinity' || Number(cfaResult) > 8.0 ? 'text-amber-400' : 'text-brand-400'}`}>
+                          {cfaResult} Years
+                        </span>
+                        <span className="text-[10px] text-slate-500 uppercase tracking-widest font-mono font-bold">PAYBACK TIMEFRAME</span>
+                      </div>
+                    </div>
+
+                    <p className="text-xs text-slate-400 text-center max-w-lg font-mono">
+                      {"$$\\text{CFA} = \\frac{E_{\\text{embedded}}}{E_{\\text{annual\\_savings}} - E_{\\text{annual\\_maintenance}}}$$"}
+                    </p>
+                  </div>
+
+                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    
+                    {/* CFA Sliders Panel */}
+                    <div className="p-5 rounded-xl bg-slate-900/60 border border-slate-800 space-y-4 lg:col-span-1">
+                      <div className="flex items-center justify-between border-b border-slate-800 pb-2">
+                        <h4 className="text-xs font-bold text-slate-300 uppercase tracking-widest">Tweak Variables</h4>
+                        <span className="px-1.5 py-0.5 bg-blue-900/30 text-[9px] text-blue-400 font-mono rounded border border-blue-500/20">Unit: tCO2e</span>
+                      </div>
+                      
+                      {/* Slider 1 */}
+                      <div className="space-y-1">
+                        <div className="flex justify-between text-xs">
+                          <span className="text-slate-300 font-medium">Embedded Asset Carbon (E_embedded)</span>
+                          <span className="text-blue-400 font-mono font-bold">{eEmbed} tCO2e</span>
+                        </div>
+                        <input 
+                          type="range" min="50" max="600" value={eEmbed} 
+                          onChange={(e) => setEEmbed(Number(e.target.value))} 
+                          className="w-full accent-blue-500 bg-slate-800 rounded-lg h-1.5 cursor-pointer relative z-40" 
+                        />
+                        <span className="text-[10px] text-slate-500 font-sinhala italic block leading-none">නිෂ්පාදනය සඳහා වැය වන මූලික කාබන් විමෝචනය</span>
+                      </div>
+
+                      {/* Slider 2 */}
+                      <div className="space-y-1">
+                        <div className="flex justify-between text-xs">
+                          <span className="text-slate-300 font-medium">Annual Carbon Savings (E_savings)</span>
+                          <span className="text-emerald-400 font-mono font-bold">{eSavings} tCO2e</span>
+                        </div>
+                        <input 
+                          type="range" min="5" max="150" value={eSavings} 
+                          onChange={(e) => setESavings(Number(e.target.value))} 
+                          className="w-full accent-brand-500 bg-slate-800 rounded-lg h-1.5 cursor-pointer relative z-40" 
+                        />
+                        <span className="text-[10px] text-slate-500 font-sinhala italic block leading-none">වාර්ෂිකව ඉතිරි කරන කාබන් විමෝචනය</span>
+                      </div>
+
+                      {/* Slider 3 */}
+                      <div className="space-y-1">
+                        <div className="flex justify-between text-xs">
+                          <span className="text-slate-300 font-medium">Annual Maintenance carbon (E_maintenance)</span>
+                          <span className="text-red-400 font-mono font-bold">{eMaint} tCO2e</span>
+                        </div>
+                        <input 
+                          type="range" min="1" max="60" value={eMaint} 
+                          onChange={(e) => setEMaint(Number(e.target.value))} 
+                          className="w-full accent-red-400 bg-slate-800 rounded-lg h-1.5 cursor-pointer relative z-40" 
+                        />
+                        <span className="text-[10px] text-slate-500 font-sinhala italic block leading-none">වාර්ෂික නඩත්තුව සඳහා වැය වන කාබන් පිරිවැය</span>
+                      </div>
+                    </div>
+
+                    {/* Step-by-Step Amortization Timeline Visualization */}
+                    <div className="p-5 rounded-xl bg-slate-900/60 border border-slate-800 space-y-4 lg:col-span-2 flex flex-col justify-between">
+                      <div>
+                        <h4 className="text-xs font-bold text-slate-300 uppercase tracking-widest mb-1.5">Projected Carbon Offset Timeline</h4>
+                        <span className="text-[10px] text-slate-500 font-sinhala italic block mb-3">කාබන් පිරිවැය පියවීමේ වාර්ෂික ප්‍රගති නිරූපණය</span>
+                        
+                        {carbonDifference <= 0 ? (
+                          <div className="p-4 rounded-lg bg-red-950/20 border border-red-500/20 text-red-400 text-xs">
+                            <strong>Critical Carbon Trap!</strong> Annual maintenance emissions exceed annual savings. This asset will never pay back its carbon debt. Amortization is impossible.
+                          </div>
+                        ) : (
+                          <div className="space-y-2.5">
+                            {[1, 2, 3, 4, 5, 6, 7, 8].map((year) => {
+                              // Calculate remaining carbon debt for each year
+                              const remainingDebt = Math.max(0, eEmbed - (year * carbonDifference));
+                              const percentage = ((remainingDebt / eEmbed) * 100).toFixed(0);
+                              
+                              return (
+                                <div key={year} className="flex items-center gap-3 text-xs">
+                                  <span className="w-16 font-mono text-slate-400 shrink-0">Year 0{year}:</span>
+                                  <div className="flex-1 bg-slate-950 h-5 rounded-lg overflow-hidden border border-slate-850 relative flex items-center px-2">
+                                    <div 
+                                      className="h-full bg-gradient-to-r from-emerald-500/80 to-blue-500/80 absolute left-0 top-0 transition-all duration-300" 
+                                      style={{ width: `${percentage}%` }}
+                                    ></div>
+                                    <span className="relative z-10 font-mono text-[10px] font-bold text-slate-200 ml-auto">
+                                      {remainingDebt > 0 ? `${remainingDebt.toFixed(0)} tCO2e left (${percentage}%)` : 'Amortized! ✓'}
+                                    </span>
+                                  </div>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="pt-4 border-t border-slate-800 text-[11px] text-slate-400 leading-normal">
+                        <strong>Student Tip:</strong> Think of <strong>tCO2e</strong> like financial debt. The faster we repay it with annual savings, the better for our ecological balance sheet.
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              )}
+
+              {/* TAB 4: BREAKOUT CHALLENGES */}
+              {activeTab === 'breakout' && (
+                <div className="space-y-6 animate-fadeIn">
+                  <div className="mb-2">
+                    <h3 className="text-lg font-bold text-white">Dynamic Breakout Challenges: 30-Minute Sessions</h3>
+                    <p className="text-xs text-slate-400 italic font-sinhala">කණ්ඩායම් සාකච්ඡා සහ වෘත්තීයවේදය ක්‍රියාකාරී ඇගයීම</p>
+                  </div>
+
+                  {/* 3 streamlined high-impact debate cards */}
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    
+                    {/* Prompt 1 */}
+                    <div className="p-5 rounded-xl bg-slate-900/60 border border-slate-800 flex flex-col justify-between">
+                      <div>
+                        <span className="text-[10px] bg-emerald-500/10 text-emerald-400 px-2.5 py-0.5 rounded font-mono font-bold block w-max mb-3">CHALLENGE 01</span>
+                        <h4 className="text-xs font-bold text-slate-200 uppercase tracking-wider">The SROI Debate (TBL Trade-offs)</h4>
+                        <p className="text-xs text-slate-300 leading-relaxed mt-2">
+                          If a project has an excellent Financial ROI but a terrible SROI (less than 0.5x), should a corporate manager recuse or cancel? How do we balance shareholders against consumer health?
+                        </p>
+                        <span className="text-xs text-slate-400 italic font-sinhala font-medium block mt-2.5 leading-normal">
+                          සාම්ප්‍රදායික මූල්‍ය ලාභය අතිශය ඉහළ වුවද, සමාජීය හා පාරිසරික වටිනාකම් විනාශ වන්නේ නම් ව්‍යාපෘතිය අත්හැර දැමිය යුතුද?
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Prompt 2 */}
+                    <div className="p-5 rounded-xl bg-slate-900/60 border border-slate-800 flex flex-col justify-between">
+                      <div>
+                        <span className="text-[10px] bg-blue-500/10 text-tech-400 px-2.5 py-0.5 rounded font-mono font-bold block w-max mb-3">CHALLENGE 02</span>
+                        <h4 className="text-xs font-bold text-slate-200 uppercase tracking-wider">Decoupling Carbon Traps</h4>
+                        <p className="text-xs text-slate-300 leading-relaxed mt-2">
+                          Explain how high annual maintenance emissions can lead to a "Carbon Trap" (un-amortizable status) in green technologies. What design changes reduce initial embedded footprint?
+                        </p>
+                        <span className="text-xs text-slate-400 italic font-sinhala font-medium block mt-2.5 leading-normal">
+                          නව තාක්ෂණයන් ස්ථාපිත කිරීමේදී සිදුවන මූලික කාබන් විමෝචනය අවම කිරීම සහ නඩත්තු පිරිවැය පියවා ගැනීමේ ගැටලු සාකච්ඡා කරන්න.
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Prompt 3 */}
+                    <div className="p-5 rounded-xl bg-slate-900/60 border border-slate-800 flex flex-col justify-between">
+                      <div>
+                        <span className="text-[10px] bg-purple-500/10 text-purple-400 px-2.5 py-0.5 rounded font-mono font-bold block w-max mb-3">CHALLENGE 03</span>
+                        <h4 className="text-xs font-bold text-slate-200 uppercase tracking-wider">The Conflict of Interest Protocol</h4>
+                        <p className="text-xs text-slate-300 leading-relaxed mt-2">
+                          Analyze the 4-step COI protocol from the notes: 1. Identification, 2. Disclosure, 3. Recusal, and 4. Independent Audit. How does this prevent public relations disasters?
+                        </p>
+                        <span className="text-xs text-slate-400 italic font-sinhala font-medium block mt-2.5 leading-normal">
+                          වෘත්තීය ආචාරධර්ම වල දැක්වෙන ඥාති හෝ පෞද්ගලික ලාභ ගැටුම් (COI) වළක්වා ගැනීමේ පියවර 4 සාකච්ඡා කරන්න.
+                        </span>
+                      </div>
+                    </div>
+
+                  </div>
+
+                  {/* COI Protocol Cheatsheet Display */}
+                  <div className="p-6 rounded-xl bg-slate-950 border border-slate-850">
+                    <h4 className="text-xs font-mono font-bold text-brand-400 uppercase tracking-widest mb-3">Fiduciary Virtues Cheat Sheet (OBISL Standard)</h4>
+                    <div className="grid grid-cols-1 md:grid-cols-4 gap-4 text-xs">
+                      <div className="p-3 bg-slate-900 rounded-lg border border-slate-800">
+                        <span className="font-bold text-slate-200 block">1. Identify (හඳුනාගැනීම)</span>
+                        <p className="text-slate-400 mt-1">Recognise situations where personal interests conflict with corporate duty.</p>
+                      </div>
+                      <div className="p-3 bg-slate-900 rounded-lg border border-slate-800">
+                        <span className="font-bold text-slate-200 block">2. Disclose (හෙළිදරව් කිරීම)</span>
+                        <p className="text-slate-400 mt-1">Formally notify compliance or boardroom members about family or personal ties.</p>
+                      </div>
+                      <div className="p-3 bg-slate-900 rounded-lg border border-slate-800">
+                        <span className="font-bold text-slate-200 block">3. Recuse (ඉවත් වීම)</span>
+                        <p className="text-slate-400 mt-1">Remove yourself completely from final evaluation or decision panels.</p>
+                      </div>
+                      <div className="p-3 bg-slate-900 rounded-lg border border-slate-800">
+                        <span className="font-bold text-slate-200 block">4. Audit (විගණනය)</span>
+                        <p className="text-slate-400 mt-1">Allow neutral independent committees to review procurement process.</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+            </div>
+
+            {/* Print Area Footer */}
+            <div className="hidden print:block border-t border-slate-300 pt-6 mt-8 text-center text-[10px] text-black font-sans">
+              <p className="font-bold">OBISL Campus • Certificate in Business Management Skills (CBMS)</p>
+              <p className="italic">Module 3: Business Ethics & Professionalism Practicum Manual</p>
+              <p className="mt-1 font-mono">Date Printed: {new Date().toLocaleDateString()}</p>
+            </div>
+
+          </main>
+        </div>
+      );
+    }
+
+    const rootElement = document.getElementById('root');
+    const root = ReactDOM.createRoot(rootElement);
+    root.render(<App />);
+  </script>
+</body>
+</html>
