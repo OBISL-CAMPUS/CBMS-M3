@@ -4,12 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>OBISL Campus - Module 3: Business Ethics & Professionalism</title>
+  
   <!-- Tailwind CSS Play CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- React and Babel CDNs -->
-  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
-  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   
   <!-- MathJax Configuration for dynamic LaTeX rendering -->
   <script>
@@ -31,16 +28,17 @@
     body {
       font-family: 'Plus Jakarta Sans', sans-serif;
     }
+    
     .font-sinhala {
-      font-family: 'Noto Sans Sinhala', sans-serif;
+      font-family: 'Noto Sans Sinhala', 'Plus Jakarta Sans', sans-serif;
     }
     
-    /* Smooth Scroll and Visual Transitions */
-    .transition-all-200 {
-      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    /* Elegant transition curves */
+    .transition-premium {
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    /* Scrollbar Styling */
+    /* Scrollbar Styling for premium desktop layouts */
     ::-webkit-scrollbar {
       width: 6px;
     }
@@ -55,7 +53,7 @@
       background: rgba(16, 185, 129, 0.4);
     }
 
-    /* Print Optimization styling */
+    /* Print Layout adjustments */
     @media print {
       body {
         background: #ffffff !important;
@@ -74,6 +72,7 @@
       }
     }
   </style>
+  
   <script>
     tailwind.config = {
       darkMode: 'class',
@@ -103,862 +102,1451 @@
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen relative overflow-x-hidden selection:bg-brand-500 selection:text-slate-950">
 
-  <!-- Ambient background glow behind the UI -->
+  <!-- Ambient glowing blobs -->
   <div class="absolute top-10 left-10 w-96 h-96 bg-brand-900/10 rounded-full blur-[120px] pointer-events-none z-0"></div>
   <div class="absolute bottom-20 right-10 w-80 h-80 bg-tech-500/10 rounded-full blur-[100px] pointer-events-none z-0"></div>
 
-  <!-- React Root Container -->
-  <div id="root" class="relative z-10"></div>
+  <div class="flex flex-col lg:flex-row min-h-screen relative z-10" id="app-container">
+    
+    <!-- MOBILE HEADER -->
+    <header class="lg:hidden w-full bg-slate-900 border-b border-slate-800 px-4 py-3 flex items-center justify-between sticky top-0 z-50 no-print">
+      <div class="flex items-center gap-2">
+        <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-emerald-400 to-blue-500 flex items-center justify-center font-extrabold text-slate-950 text-lg shadow-md">
+          Ω
+        </div>
+        <div>
+          <h1 class="text-xs font-black tracking-wider text-white leading-none" id="mobile-brand-title">OBISL CAMPUS</h1>
+          <span class="text-[9px] text-brand-400 font-bold tracking-widest block" id="mobile-brand-subtitle">PRACTICUM PORTAL</span>
+        </div>
+      </div>
+      <div class="flex items-center gap-2">
+        <!-- Quick Language Toggle -->
+        <button 
+          type="button"
+          id="mobile-lang-toggle"
+          onclick="toggleLanguage()"
+          class="px-2.5 py-1 text-[10px] font-extrabold rounded-md bg-slate-800 border border-slate-700 text-brand-400 hover:bg-slate-700 transition"
+        >
+          සිංහල
+        </button>
+        <!-- Menu Button -->
+        <button
+          type="button"
+          onclick="toggleMobileMenu()"
+          class="p-1.5 text-slate-400 hover:text-white rounded bg-slate-850 border border-slate-700 active:scale-95 transition"
+        >
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"/></svg>
+        </button>
+      </div>
+    </header>
 
-  <!-- React Application -->
-  <script type="text/babel">
+    <!-- MOBILE DRAWER OVERLAY -->
+    <div id="mobile-drawer" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 lg:hidden hidden no-print" onclick="toggleMobileMenu()">
+      <div class="w-72 max-w-[85vw] h-full bg-slate-900 border-r border-slate-850 p-5 flex flex-col justify-between" onclick="event.stopPropagation()">
+        <div>
+          <div class="flex items-center justify-between mb-6">
+            <div class="flex items-center gap-2.5">
+              <div class="w-9 h-9 rounded-lg bg-gradient-to-br from-emerald-400 to-blue-500 flex items-center justify-center font-extrabold text-slate-950 text-xl shadow-md">
+                Ω
+              </div>
+              <div>
+                <h1 class="text-xs font-black tracking-wider text-white" id="drawer-brand-title">OBISL CAMPUS</h1>
+                <span class="text-[9px] text-brand-400 font-bold tracking-widest block -mt-0.5" id="drawer-brand-subtitle">PRACTICUM PORTAL</span>
+              </div>
+            </div>
+            <button type="button" onclick="toggleMobileMenu()" class="p-1 text-slate-400 hover:text-white">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+          </div>
 
-    // Standalone Custom SVG Icons
-    const IconCase = () => (
-      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" /></svg>
-    );
-    const IconSroi = () => (
-      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v5.625c0 .621-.504 1.125-1.125 1.125h-2.25A1.125 1.125 0 013 18.75v-5.625zM16.5 13.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 12 21 12.504 21 13.125v5.625c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125v-5.625zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v10.125c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM3 16.5h18" /></svg>
-    );
-    const IconCarbon = () => (
-      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M12 3v18m9-9H3m12-9a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
-    );
-    const IconChat = () => (
-      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M8.625 12a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 01-2.555-.337A5.972 5.972 0 015.41 20.97a.75.75 0 01-1.074-.765 5.99 5.99 0 011.523-4.238C4.593 14.713 3 12.213 3 9.75 3 5.194 7.03 1.5 12 1.5s9 3.694 9 8.25z" /></svg>
-    );
-    const IconPrint = () => (
-      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0110.56 0m-10.56 0L6.34 18m10.94-4.171c.24.03.48.062.72.096m-.72-.096L17.66 18m0 0l.229 1.503a.75.75 0 01-.741.864H6.852a.75.75 0 01-.741-.864L6.34 18m11.32 0h-11.32M9 10.5h.008v.008H9V10.5zm3 0h.008v.008H12V10.5zm3 0h.008v.008H15V10.5z" /></svg>
-    );
-    const IconArrow = () => (
-      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5"><path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" /></svg>
-    );
-    const IconHelp = () => (
-      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z" /></svg>
-    );
+          <!-- Language Selector -->
+          <div class="mb-6 p-3 bg-slate-950/90 rounded-xl border border-slate-800">
+            <span class="text-[10px] font-mono text-slate-500 font-bold block mb-2 uppercase tracking-wider" id="drawer-lang-toggle-lbl">LANGUAGE / භාෂාව</span>
+            <div class="flex gap-1">
+              <button 
+                type="button"
+                id="drawer-lang-en"
+                onclick="setLanguage('en')"
+                class="flex-1 text-center py-2 text-xs font-bold rounded-lg transition-all"
+              >
+                English
+              </button>
+              <button 
+                type="button"
+                id="drawer-lang-si"
+                onclick="setLanguage('si')"
+                class="flex-1 text-center py-2 text-xs font-bold rounded-lg transition-all font-sinhala"
+              >
+                සිංහල
+              </button>
+            </div>
+          </div>
 
-    function App() {
-      const [activeTab, setActiveTab] = React.useState('case');
-      const [showGlossary, setShowGlossary] = React.useState(false);
-      
-      // Global simulation state variables driven by sliders
-      // SROI Parameters
-      const [vFin, setVFin] = React.useState(100);       // Financial Value ($ Millions)
-      const [vSoc, setVSoc] = React.useState(75);        // Monetized Social Value ($ Millions)
-      const [vEnv, setVEnv] = React.useState(45);        // Monetized Environmental Value ($ Millions)
-      const [iTot, setITot] = React.useState(120);       // Total Investment ($ Millions)
+          <!-- Mobile Nav Tabs -->
+          <nav class="space-y-1.5" id="mobile-nav-links">
+            <!-- Dynamically populated via JavaScript -->
+          </nav>
+        </div>
 
-      // CFA Parameters
-      const [eEmbed, setEEmbed] = React.useState(300);   // Embedded Carbon Cost (tCO2e)
-      const [eSavings, setESavings] = React.useState(60); // Annual Carbon Savings (tCO2e/year)
-      const [eMaint, setEMaint] = React.useState(15);    // Annual Upkeep footprint (tCO2e/year)
+        <div class="pt-4 border-t border-slate-800">
+          <button
+            type="button"
+            onclick="triggerPrint()"
+            class="w-full flex items-center justify-center gap-2 bg-slate-800 hover:bg-brand-500 hover:text-slate-950 text-slate-300 py-2.5 px-3 rounded-lg text-xs font-bold transition-all uppercase tracking-wider"
+          >
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
+            <span id="drawer-btn-print">EXPORT TO PDF / PRINT</span>
+          </button>
+          <div class="mt-2 text-center text-[8px] text-slate-500 font-mono" id="drawer-ver">
+            CBMS Practicum Engine v2.3
+          </div>
+        </div>
+      </div>
+    </div>
 
-      // Active Case Study selections
-      const [selectedChipAction, setSelectedChipAction] = React.useState(null);
-      const [selectedGridAction, setSelectedGridAction] = React.useState(null);
-
-      // SROI Mathematical calculation
-      const sroiResult = ((vFin + vSoc + vEnv) / iTot).toFixed(2);
-
-      // CFA Mathematical calculation
-      const carbonDifference = eSavings - eMaint;
-      const cfaResult = carbonDifference > 0 ? (eEmbed / carbonDifference).toFixed(1) : 'Infinity';
-
-      // Automatic state updates when users select case study paths (connecting theory to calculations)
-      const applyRecallDecision = (choice) => {
-        setSelectedChipAction(choice);
-        if (choice === 'ethical') {
-          // Dr. Elena Vance's decision: Protect people and planet, take short-term financial hit
-          setVFin(40);     // Low immediate financial return
-          setVSoc(120);    // High social benefit / trust preserved
-          setVEnv(90);     // High environmental protection / recycled safely
-          setITot(100);    // Minimal operational cost inflation
-        } else {
-          // Arthur Sterling's decision: Cover up, ship defective chips immediately to hit quarterly targets
-          setVFin(150);    // High short-term financial gain
-          setVSoc(10);     // Low trust
-          setVEnv(5);      // Environmental threat neglected
-          setITot(110);    // Cost tracking inflation
-        }
-      };
-
-      const applyUpgradeDecision = (choice) => {
-        setSelectedGridAction(choice);
-        if (choice === 'solar') {
-          // Renewable Solar Upgrade
-          setEEmbed(220);   // Modest manufacturing footprint
-          setESavings(75);  // Outstanding annual emission reduction
-          setEMaint(10);    // Minimal continuous emissions
-        } else {
-          // Budget Coal/Gas Upgrade
-          setEEmbed(450);   // Heavy initial infrastructure footprint
-          setESavings(20);  // Low carbon offsetting performance
-          setEMaint(40);    // High runtime upkeep emissions
-        }
-      };
-
-      // Hook to trigger MathJax typeset updates on state transitions safely
-      React.useEffect(() => {
-        if (window.MathJax && window.MathJax.typesetPromise) {
-          window.MathJax.typesetPromise().catch((err) => {
-            console.warn("MathJax typesetting warning:", err);
-          });
-        }
-      }, [vFin, vSoc, vEnv, iTot, eEmbed, eSavings, eMaint, activeTab]);
-
-      // Handler for printing/exporting
-      const handlePrint = () => {
-        window.print();
-      };
-
-      return (
-        <div className="flex flex-col lg:flex-row min-h-screen">
-          
-          {/* Decoupled Left Sidebar (Navigation & Session Progress) */}
-          <aside className="w-full lg:w-80 bg-slate-900/95 border-r border-slate-800 p-6 flex flex-col justify-between shrink-0 no-print lg:sticky lg:top-0 lg:h-screen">
+    <!-- DESKTOP SIDEBAR -->
+    <aside class="hidden lg:flex w-80 bg-slate-900/95 border-r border-slate-800 p-6 flex-col justify-between shrink-0 no-print lg:sticky lg:top-0 lg:h-screen z-10">
+      <div>
+        <!-- Institutional Branding -->
+        <div class="mb-6">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-400 to-blue-500 flex items-center justify-center font-extrabold text-slate-950 text-2xl shadow-lg shadow-brand-500/20">
+              Ω
+            </div>
             <div>
-              {/* Institutional Branding */}
-              <div className="mb-6">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-400 to-blue-500 flex items-center justify-center font-extrabold text-slate-950 text-2xl shadow-lg shadow-brand-500/20">
-                    Ω
-                  </div>
-                  <div>
-                    <h1 className="text-sm font-black tracking-wider text-white">OBISL CAMPUS</h1>
-                    <span className="text-[10px] text-brand-400 font-bold tracking-widest block -mt-1">PRACTICUM PORTAL</span>
-                  </div>
+              <h1 class="text-sm font-black tracking-wider text-white" id="desktop-brand-title">OBISL CAMPUS</h1>
+              <span class="text-[10px] text-brand-400 font-bold tracking-widest block -mt-1" id="desktop-brand-subtitle">PRACTICUM PORTAL</span>
+            </div>
+          </div>
+
+          <!-- Language Switcher -->
+          <div class="mt-5 flex bg-slate-950/90 p-1 rounded-xl border border-slate-800 gap-1">
+            <button 
+              type="button"
+              id="desktop-lang-en"
+              onclick="setLanguage('en')"
+              class="flex-1 text-center py-2.5 text-xs font-bold rounded-lg transition-all duration-200 cursor-pointer"
+            >
+              English
+            </button>
+            <button 
+              type="button"
+              id="desktop-lang-si"
+              onclick="setLanguage('si')"
+              class="flex-1 text-center py-2.5 text-xs font-bold rounded-lg transition-all duration-200 font-sinhala cursor-pointer"
+            >
+              සිංහල
+            </button>
+          </div>
+
+          <div class="mt-4 p-3.5 rounded-xl bg-slate-950/80 border border-slate-800">
+            <p class="text-xs font-bold text-slate-200" id="desktop-module-title">M3: Business Ethics & Professionalism</p>
+          </div>
+        </div>
+
+        <!-- Navigation Tabs -->
+        <nav class="space-y-1.5" id="desktop-nav-links">
+          <!-- Dynamically populated via JavaScript -->
+        </nav>
+
+        <!-- Glossary Explainer Block -->
+        <div class="mt-6 p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="text-[10px] font-mono text-slate-400 font-bold uppercase tracking-wider" id="glossary-header">Metric Explanations</span>
+            <span class="w-2 h-2 rounded-full bg-blue-400"></span>
+          </div>
+          <p class="text-[11px] text-slate-300 leading-normal" id="glossary-teaser">Confused about terms like tCO2e or SROI?</p>
+          <button
+            type="button"
+            onclick="toggleGlossary()"
+            class="w-full flex items-center justify-center gap-1.5 bg-blue-900/30 hover:bg-blue-900/50 border border-blue-500/30 text-blue-400 py-1.5 px-2 rounded-lg text-[10px] font-bold tracking-wider transition-all cursor-pointer relative z-40"
+          >
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            <span id="glossary-btn-lbl">SHOW EXPLAINERS</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Sidebar Action Block -->
+      <div class="pt-4 border-t border-slate-800 mt-4">
+        <button
+          type="button"
+          onclick="triggerPrint()"
+          class="w-full flex items-center justify-center gap-2 bg-slate-800 hover:bg-brand-500 hover:text-slate-950 text-slate-300 py-2.5 px-3 rounded-xl text-xs font-bold transition-all cursor-pointer relative z-40 shadow-md uppercase tracking-wider"
+        >
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
+          <span id="desktop-btn-print">EXPORT TO PDF / PRINT</span>
+        </button>
+        <div class="mt-2.5 text-center text-[9px] text-slate-500 font-mono" id="desktop-ver">
+          CBMS Practicum Engine v2.3
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Interactive Arena -->
+    <main class="flex-1 p-4 lg:p-8 flex flex-col justify-between print-container overflow-y-auto h-auto lg:h-screen lg:max-h-screen z-10">
+      
+      <!-- SCOREBOARD PERSISTENT HUD -->
+      <header class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-800 mb-6 no-print">
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="px-2 py-0.5 rounded text-[10px] bg-brand-500/10 text-brand-400 border border-brand-500/20 font-mono uppercase tracking-wider" id="hud-session-lbl">CBMS STUDY SESSION</span>
+            <div class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></div>
+            <span class="text-xs text-slate-400 font-mono tracking-wide" id="hud-sys-lbl">LIVE SYSTEMS ALIGNMENT</span>
+          </div>
+          <h2 class="text-lg lg:text-xl font-bold tracking-tight text-white mt-1" id="hud-module-lbl">Module 3: Business Ethics & Professionalism</h2>
+        </div>
+
+        <!-- Dynamic Counter Hud Score Cards -->
+        <div class="flex items-center gap-4 bg-slate-900/60 px-4 py-2.5 rounded-xl border border-slate-800 shrink-0 w-full sm:w-auto justify-around sm:justify-end">
+          <div class="text-right border-r border-slate-800 pr-4 flex-1 sm:flex-initial">
+            <span class="text-[10px] font-mono text-slate-400 block uppercase font-bold tracking-wider" id="hud-sroi-title">LIVE SROI</span>
+            <span id="hud-sroi-val" class="text-base lg:text-lg font-black font-mono leading-tight block">1.00x</span>
+            <span class="text-[9px] text-slate-500 block" id="hud-sroi-desc">Sustainable ROI</span>
+          </div>
+          <div class="text-right flex-1 sm:flex-initial">
+            <span class="text-[10px] font-mono text-slate-400 block uppercase font-bold tracking-wider" id="hud-cfa-title">CFA PAYBACK</span>
+            <span id="hud-cfa-val" class="text-base lg:text-lg font-black font-mono leading-tight block">5.0 Yrs</span>
+            <span class="text-[9px] text-slate-500 block" id="hud-cfa-desc">Carbon Payback</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- TAB LAYOUT CONTROLLER -->
+      <div class="flex-1" id="workspace-target">
+        
+        <!-- GLOSSARY CONTAINER (Toggled Inline) -->
+        <div id="glossary-box" class="mb-6 p-4 lg:p-5 rounded-2xl bg-slate-900 border border-blue-500/30 text-xs hidden space-y-4 shadow-xl relative z-30">
+          <div class="flex justify-between items-center border-b border-slate-800 pb-2">
+            <span class="font-bold text-blue-400 uppercase tracking-widest flex items-center gap-2" id="glossary-main-lbl">
+              Student-Friendly Metric Explanations
+            </span>
+            <button type="button" onclick="toggleGlossary()" class="text-slate-400 hover:text-white font-bold cursor-pointer p-1" id="glossary-close">
+              ✕ Close
+            </button>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-6">
+            <div class="space-y-1 bg-slate-950 p-4 rounded-xl border border-slate-850">
+              <span class="font-bold text-blue-400 uppercase tracking-wider block">tCO2e</span>
+              <p class="text-slate-400 font-bold text-[11px] leading-tight mb-2" id="gl-t-name">Tonnes of Carbon Dioxide Equivalent</p>
+              <p class="text-slate-300 leading-normal" id="gl-t-desc">The global standard metric used to measure greenhouse gas emissions.</p>
+              <span class="text-[10px] text-brand-400 italic block pt-2.5 border-t border-slate-900 mt-2" id="gl-t-analogy">Analogy context</span>
+            </div>
+            <div class="space-y-1 bg-slate-950 p-4 rounded-xl border border-slate-850">
+              <span class="font-bold text-emerald-400 uppercase tracking-wider block" id="gl-s-title">Sustainable SROI</span>
+              <p class="text-slate-400 font-bold text-[11px] leading-tight mb-2" id="gl-s-name">Social Return on Investment</p>
+              <p class="text-slate-300 leading-normal" id="gl-s-desc">Monetizes social and environmental benefits.</p>
+              <span class="text-[10px] text-brand-400 italic block pt-2.5 border-t border-slate-900 mt-2" id="gl-s-analogy">Threshold metrics</span>
+            </div>
+            <div class="space-y-1 bg-slate-950 p-4 rounded-xl border border-slate-850">
+              <span class="font-bold text-teal-400 uppercase tracking-wider block" id="gl-c-title">CFA Payback</span>
+              <p class="text-slate-400 font-bold text-[11px] leading-tight mb-2" id="gl-c-name">Carbon Footprint Amortization</p>
+              <p class="text-slate-300 leading-normal" id="gl-c-desc">Calculates timeframe to pay back initial carbon debt.</p>
+              <span class="text-[10px] text-brand-400 italic block pt-2.5 border-t border-slate-900 mt-2" id="gl-c-analogy">Target threshold</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 1: CORE DECISIONS -->
+        <section id="tab-case" class="workspace-tab space-y-6">
+          <div class="p-4 lg:p-5 rounded-2xl bg-gradient-to-r from-brand-900/20 to-slate-900/50 border border-brand-500/20">
+            <h3 class="text-base lg:text-lg font-bold text-slate-100" id="case-banner-title">Step 1: Link Decisions to Numbers</h3>
+            <p class="text-xs text-slate-300 mt-1 leading-relaxed" id="case-banner-desc">Choose your decisions below to dynamically populate calculations.</p>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <!-- Case Study A Panel -->
+            <div class="p-4 lg:p-5 rounded-xl bg-slate-900/60 border border-slate-800 flex flex-col justify-between">
+              <div>
+                <div class="flex items-center justify-between gap-2 flex-wrap">
+                  <span class="text-[10px] bg-red-500/10 text-red-400 px-2.5 py-1 rounded font-mono font-bold tracking-wide" id="case-a-lbl">CASE A</span>
+                  <span class="text-xs text-slate-500 font-mono" id="case-a-comp">NexusCore Technologies</span>
                 </div>
-                <div className="mt-4 p-3.5 rounded-xl bg-slate-950/80 border border-slate-800">
-                  <p className="text-xs font-bold text-slate-200">M3: Business Ethics & Professionalism</p>
-                  <span className="text-[10px] text-slate-400 italic font-sinhala block mt-0.5">ව්‍යාපාරික ආචාර ධර්ම සහ වෘත්තීයවේදය</span>
-                </div>
+                <h4 class="text-xs lg:text-sm font-semibold text-slate-200 mt-3 leading-relaxed" id="case-a-desc">Thermal leak processor issue.</h4>
               </div>
 
-              {/* Navigation Tabs */}
-              <nav className="space-y-1.5">
-                {[
-                  { id: 'case', label: '1. Case Connections', sin: 'සිද්ධි සම්බන්ධතා', icon: <IconCase /> },
-                  { id: 'sroi', label: '2. SROI Impact Lab', sin: 'තිරසාර ROI විශ්ලේෂණය', icon: <IconSroi /> },
-                  { id: 'cfa', label: '3. CFA Carbon Lab', sin: 'කාබන් පියවීම් විශ්ලේෂණය', icon: <IconCarbon /> },
-                  { id: 'breakout', label: '4. Breakout Challenges', sin: 'සාකච්ඡා සහ වෘත්තීයවේදය', icon: <IconChat /> },
-                ].map((tab) => (
-                  <button
-                    key={tab.id}
-                    type="button"
-                    onClick={() => setActiveTab(tab.id)}
-                    className={`w-full flex items-center gap-3.5 px-4 py-3.5 rounded-xl transition-all duration-150 text-left cursor-pointer relative z-40 ${
-                      activeTab === tab.id
-                        ? 'bg-gradient-to-r from-brand-900/40 to-slate-900 border-l-4 border-brand-500 text-brand-400 font-semibold shadow-inner'
-                        : 'text-slate-400 hover:text-white hover:bg-slate-800/40'
-                    }`}
-                  >
-                    <span className={activeTab === tab.id ? 'text-brand-400' : 'text-slate-500'}>
-                      {tab.icon}
-                    </span>
-                    <div>
-                      <span className="text-xs block tracking-wide">{tab.label}</span>
-                      <span className="text-[9px] text-slate-500 font-sinhala italic block leading-tight">{tab.sin}</span>
-                    </div>
-                  </button>
-                ))}
-              </nav>
-
-              {/* Glossary Trigger Card */}
-              <div className="mt-6 p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-2">
-                <div className="flex items-center justify-between">
-                  <span className="text-[10px] font-mono text-slate-400 font-bold uppercase tracking-wider">Metric Explanations</span>
-                  <span className="w-2 h-2 rounded-full bg-blue-400"></span>
-                </div>
-                <p className="text-[11px] text-slate-300">Confused about terms like <strong className="text-blue-400">tCO2e</strong> or <strong className="text-emerald-400">SROI</strong>?</p>
-                <button
-                  type="button"
-                  onClick={() => setShowGlossary(!showGlossary)}
-                  className="w-full flex items-center justify-center gap-1.5 bg-blue-900/30 hover:bg-blue-900/50 border border-blue-500/30 text-blue-400 py-1.5 px-2 rounded-lg text-[10px] font-bold tracking-wider transition-all cursor-pointer relative z-40"
-                >
-                  <IconHelp />
-                  <span>{showGlossary ? 'HIDE EXPLAINERS' : 'SHOW EXPLAINERS'}</span>
+              <div class="mt-6 space-y-3">
+                <button type="button" onclick="selectPathA('ethical')" id="btn-path-a1" class="w-full p-4 rounded-xl text-left border transition-all-200 bg-slate-950 hover:bg-slate-900 border-slate-850">
+                  <div class="flex justify-between items-center flex-wrap gap-1">
+                    <span class="font-bold text-brand-400 text-xs" id="path-a1-title">Path A1</span>
+                    <span class="text-[9px] bg-brand-500/15 text-brand-400 px-2 py-0.5 rounded font-mono font-bold" id="path-a1-tag">TBL Standard</span>
+                  </div>
+                  <p class="text-[11px] text-slate-300 mt-2 leading-relaxed" id="path-a1-desc">Description</p>
+                </button>
+                <button type="button" onclick="selectPathA('unethical')" id="btn-path-a2" class="w-full p-4 rounded-xl text-left border transition-all-200 bg-slate-950 hover:bg-slate-900 border-slate-850">
+                  <div class="flex justify-between items-center flex-wrap gap-1">
+                    <span class="font-bold text-red-400 text-xs" id="path-a2-title">Path A2</span>
+                    <span class="text-[9px] bg-red-500/10 text-red-400 px-2 py-0.5 rounded font-mono font-bold" id="path-a2-tag">Profit Focus</span>
+                  </div>
+                  <p class="text-[11px] text-slate-300 mt-2 leading-relaxed" id="path-a2-desc">Description</p>
                 </button>
               </div>
-            </div>
 
-            {/* Sidebar Action Block */}
-            <div className="pt-4 border-t border-slate-800 mt-4">
-              <button
-                type="button"
-                onClick={handlePrint}
-                className="w-full flex items-center justify-center gap-2 bg-slate-800 hover:bg-brand-500 hover:text-slate-950 text-slate-300 py-2.5 px-3 rounded-xl text-xs font-bold transition-all cursor-pointer relative z-40 shadow-md"
-              >
-                <IconPrint />
-                <span>EXPORT TO PDF / PRINT</span>
-              </button>
-              <div className="mt-2.5 text-center text-[9px] text-slate-500 font-mono">
-                CBMS Practicum Engine v2.2
+              <!-- Linked feedback area -->
+              <div id="case-a-feedback" class="mt-4 p-4 bg-slate-950 rounded-lg border border-slate-800 text-[11px] space-y-2.5 hidden">
+                <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1">
+                  <span class="text-slate-400 font-medium" id="case-a-lbl-linked">Linked SROI metrics:</span>
+                  <span class="text-brand-400 font-bold font-mono text-center sm:text-right" id="case-a-linked-val">Values</span>
+                </div>
+                <div class="pt-2 border-t border-slate-850 flex justify-between items-center flex-wrap gap-1">
+                  <span class="text-slate-400 font-medium" id="case-a-lbl-calc">Calculated SROI:</span>
+                  <span class="font-bold font-mono text-xs" id="case-a-calc-out">Value</span>
+                </div>
               </div>
             </div>
-          </aside>
 
-          {/* Main Visual Learning Sandbox */}
-          <main className="flex-1 p-4 lg:p-8 flex flex-col justify-between print-container overflow-y-auto h-screen max-h-screen">
-            
-            {/* Header displaying active context with Persistent HUD Scoreboard */}
-            <header className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-800 mb-6 no-print">
+            <!-- Case Study B Panel -->
+            <div class="p-4 lg:p-5 rounded-xl bg-slate-900/60 border border-slate-800 flex flex-col justify-between">
               <div>
-                <div className="flex items-center gap-2">
-                  <span className="px-2 py-0.5 rounded text-[10px] bg-brand-500/10 text-brand-400 border border-brand-500/20 font-mono uppercase">CBMS STUDY SESSION</span>
-                  <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></div>
-                  <span className="text-xs text-slate-400 font-mono">LIVE SYSTEMS ALIGNMENT</span>
+                <div class="flex items-center justify-between gap-2 flex-wrap">
+                  <span class="text-[10px] bg-blue-500/10 text-tech-400 px-2.5 py-1 rounded font-mono font-bold tracking-wide" id="case-b-lbl">CASE B</span>
+                  <span class="text-xs text-slate-500 font-mono" id="case-b-comp">Facility Grid Upgrade</span>
                 </div>
-                <h2 className="text-xl font-bold tracking-tight text-white mt-1">Module 3: Business Ethics & Professionalism</h2>
-                <p className="text-xs text-slate-400 font-sinhala italic">මොඩියුලය 3: ව්‍යාපාරික ආචාර ධර්ම සහ වෘත්තීයවේදය • OBISL Campus</p>
+                <h4 class="text-xs lg:text-sm font-semibold text-slate-200 mt-3 leading-relaxed" id="case-b-desc">Carbon reduction challenge.</h4>
               </div>
 
-              {/* Persistent Dynamic HUD Scoreboard */}
-              <div className="flex items-center gap-4 bg-slate-900/60 px-4 py-2.5 rounded-xl border border-slate-800 shrink-0">
-                <div className="text-right border-r border-slate-850 pr-4">
-                  <span className="text-[10px] font-mono text-slate-400 block uppercase font-bold tracking-wider">LIVE SROI</span>
-                  <span className={`text-lg font-black font-mono leading-tight block ${Number(sroiResult) >= 1.5 ? 'text-brand-400' : Number(sroiResult) >= 1.0 ? 'text-amber-400' : 'text-red-400 animate-pulse'}`}>
-                    {sroiResult}x
-                  </span>
-                  <span className="text-[9px] text-slate-500 block font-sinhala">තිරසාර ROI</span>
+              <div class="mt-6 space-y-3">
+                <button type="button" onclick="selectPathB('solar')" id="btn-path-b1" class="w-full p-4 rounded-xl text-left border transition-all-200 bg-slate-950 hover:bg-slate-900 border-slate-850">
+                  <div class="flex justify-between items-center flex-wrap gap-1">
+                    <span class="font-bold text-brand-400 text-xs" id="path-b1-title">Path B1</span>
+                    <span class="text-[9px] bg-brand-500/15 text-brand-400 px-2 py-0.5 rounded font-mono font-bold" id="path-b1-tag">Solar Smart</span>
+                  </div>
+                  <p class="text-[11px] text-slate-300 mt-2 leading-relaxed" id="path-b1-desc">Description</p>
+                </button>
+                <button type="button" onclick="selectPathB('coal')" id="btn-path-b2" class="w-full p-4 rounded-xl text-left border transition-all-200 bg-slate-950 hover:bg-slate-900 border-slate-850">
+                  <div class="flex justify-between items-center flex-wrap gap-1">
+                    <span class="font-bold text-red-400 text-xs" id="path-b2-title">Path B2</span>
+                    <span class="text-[9px] bg-red-500/10 text-red-400 px-2 py-0.5 rounded font-mono font-bold" id="path-b2-tag">Standard Grid</span>
+                  </div>
+                  <p class="text-[11px] text-slate-300 mt-2 leading-relaxed" id="path-b2-desc">Description</p>
+                </button>
+              </div>
+
+              <!-- Linked feedback area -->
+              <div id="case-b-feedback" class="mt-4 p-4 bg-slate-950 rounded-lg border border-slate-800 text-[11px] space-y-2.5 hidden">
+                <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1">
+                  <span class="text-slate-400 font-medium" id="case-b-lbl-linked">Linked CFA metrics:</span>
+                  <span class="text-brand-400 font-bold font-mono text-center sm:text-right" id="case-b-linked-val">Values</span>
                 </div>
-                <div className="text-right">
-                  <span className="text-[10px] font-mono text-slate-400 block uppercase font-bold tracking-wider">CFA PAYBACK</span>
-                  <span className={`text-lg font-black font-mono leading-tight block ${cfaResult === 'Infinity' || Number(cfaResult) > 8.0 ? 'text-amber-400 animate-pulse' : 'text-brand-400'}`}>
-                    {cfaResult} {cfaResult === 'Infinity' ? '' : 'Yrs'}
-                  </span>
-                  <span className="text-[9px] text-slate-500 block font-sinhala">කාබන් පියවීම</span>
+                <div class="pt-2 border-t border-slate-850 flex justify-between items-center flex-wrap gap-1">
+                  <span class="text-slate-400 font-medium" id="case-b-lbl-calc">CFA Amortization:</span>
+                  <span class="font-bold font-mono text-xs" id="case-b-calc-out">Value</span>
                 </div>
               </div>
-            </header>
+            </div>
+          </div>
 
-            {/* TAB CONTENT SPACES */}
-            <div className="flex-1">
+          <!-- Bottom Navigation Prompter -->
+          <div class="p-4 bg-slate-900 border border-slate-800 rounded-xl flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
+            <div class="text-center sm:text-left">
+              <span class="font-bold text-slate-200" id="case-prompt-text">Ready to analyze SROI and CFA formulas?</span>
+            </div>
+            <button type="button" onclick="setTab('sroi')" class="w-full sm:w-auto flex items-center justify-center gap-2 bg-brand-500 hover:bg-brand-600 text-slate-950 font-bold px-5 py-3 rounded-xl transition-all duration-150 cursor-pointer shadow-lg active:scale-95">
+              <span id="case-btn-next">Proceed to SROI Lab</span>
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/></svg>
+            </button>
+          </div>
+        </section>
 
-              {/* GLOSSARY OVERLAY CARD */}
-              {showGlossary && (
-                <div className="mb-6 p-5 rounded-2xl bg-slate-900 border border-blue-500/30 text-xs animate-slideDown space-y-4 shadow-xl relative z-30">
-                  <div className="flex justify-between items-center border-b border-slate-800 pb-2">
-                    <span className="font-bold text-blue-400 uppercase tracking-widest flex items-center gap-2">
-                      <IconHelp /> Student-Friendly Metric Explanations
-                    </span>
-                    <button 
-                      type="button"
-                      onClick={() => setShowGlossary(false)} 
-                      className="text-slate-400 hover:text-white font-bold cursor-pointer"
-                    >
-                      ✕ Close
-                    </button>
+        <!-- TAB 2: SROI LABORATORY -->
+        <section id="tab-sroi" class="workspace-tab space-y-6 hidden">
+          <div class="p-4 lg:p-5 rounded-2xl bg-gradient-to-r from-brand-900/20 to-slate-900/50 border border-brand-500/20">
+            <span class="text-xs text-brand-400 font-bold uppercase tracking-wider block" id="sroi-panel-tag">Social Return on Investment (SROI)</span>
+            <h3 class="text-base lg:text-lg font-bold text-slate-100" id="sroi-panel-title">Monetizing TBL impact metrics.</h3>
+            <p class="text-xs text-slate-300 mt-2.5 leading-relaxed" id="sroi-panel-desc">Explanation content.</p>
+          </div>
+
+          <!-- Formula Board -->
+          <div class="p-5 lg:p-6 rounded-xl bg-slate-900/40 border border-slate-800 flex flex-col items-center justify-center space-y-4">
+            <span class="text-xs text-slate-400 font-mono font-bold tracking-widest text-center" id="sroi-eq-lbl">LIVE SROI MATHEMATICS</span>
+            
+            <div class="flex flex-col sm:flex-row items-center gap-6 w-full justify-center">
+              <div class="flex items-center gap-3">
+                <div class="flex flex-col items-center">
+                  <!-- Numerator -->
+                  <div class="text-xs lg:text-sm font-semibold text-slate-300 pb-2 border-b-2 border-slate-700 text-center flex items-center gap-1.5 font-mono">
+                    <span class="text-blue-400 font-bold" id="eq-sroi-vfin">$100M</span>
+                    <span>+</span>
+                    <span class="text-emerald-400 font-bold" id="eq-sroi-vsoc">$75M</span>
+                    <span>+</span>
+                    <span class="text-teal-400 font-bold" id="eq-sroi-venv">$45M</span>
                   </div>
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    
-                    {/* explaining tCO2e */}
-                    <div className="space-y-1 bg-slate-950 p-3 rounded-xl border border-slate-850">
-                      <span className="font-bold text-blue-400 uppercase tracking-wider block">tCO2e</span>
-                      <p className="text-slate-300 leading-normal">
-                        <strong>Tonnes of Carbon Dioxide Equivalent:</strong> The global standard metric used to measure and compare total Greenhouse Gas (GHG) emissions.
-                      </p>
-                      <p className="text-slate-400 italic text-[11px] leading-normal pt-1 border-t border-slate-900">
-                        <strong>Sinhala:</strong> කාබන් ඩයොක්සයිඩ් සමාන මෙට්‍රික් ටොන් (විමෝචන ප්‍රමාණය මනින ඒකකය).
-                      </p>
-                      <span className="text-[10px] text-brand-400 italic block pt-1 font-semibold">
-                        💡 Analogy: 1 tCO2e is like burning 425 liters of gasoline.
-                      </span>
-                    </div>
-
-                    {/* explaining SROI */}
-                    <div className="space-y-1 bg-slate-950 p-3 rounded-xl border border-slate-850">
-                      <span className="font-bold text-emerald-400 uppercase tracking-wider block">Sustainable SROI</span>
-                      <p className="text-slate-300 leading-normal">
-                        <strong>Social Return on Investment:</strong> Traditional ROI only measures dollars. SROI translates social trust and clean-air contributions into dollar terms, adding them to direct revenue.
-                      </p>
-                      <p className="text-slate-400 italic text-[11px] leading-normal pt-1 border-t border-slate-900">
-                        <strong>Sinhala:</strong> තිරසාර හෝ සමාජීය ආයෝජන ප්‍රතිලාභය (සමාජීය හා පාරිසරික වටිනාකම් මනින ක්‍රමය).
-                      </p>
-                      <span className="text-[10px] text-brand-400 italic block pt-1 font-semibold">
-                        💡 Threshold: An SROI score &gt; 1.0x means society gets back more than you spent.
-                      </span>
-                    </div>
-
-                    {/* explaining CFA */}
-                    <div className="space-y-1 bg-slate-950 p-3 rounded-xl border border-slate-850">
-                      <span className="font-bold text-teal-400 uppercase tracking-wider block">CFA Payback</span>
-                      <p className="text-slate-300 leading-normal">
-                        <strong>Carbon Footprint Amortization:</strong> Manufacturing green technology (like solar panels) creates carbon footprint. CFA calculates how many years it takes for annual savings to pay back this initial carbon debt.
-                      </p>
-                      <p className="text-slate-400 italic text-[11px] leading-normal pt-1 border-t border-slate-900">
-                        <strong>Sinhala:</strong> කාබන් පියසටහන් පියවීමේ කාලසීමාව (මූලික කාබන් ණය මුදල පියවීමට ගතවන කාලය).
-                      </p>
-                      <span className="text-[10px] text-brand-400 italic block pt-1 font-semibold">
-                        💡 Goal: A smaller payback period is always better!
-                      </span>
-                    </div>
-
+                  <!-- Denominator -->
+                  <div class="text-xs lg:text-sm font-semibold text-slate-400 pt-2 text-center font-mono text-purple-400" id="eq-sroi-itot">
+                    $120M
                   </div>
                 </div>
-              )}
+              </div>
 
-              {/* TAB 1: CASE CONNECTIONS */}
-              {activeTab === 'case' && (
-                <div className="space-y-6 animate-fadeIn">
-                  <div className="p-5 rounded-2xl bg-gradient-to-r from-brand-900/20 to-slate-900/50 border border-brand-500/20">
-                    <h3 className="text-lg font-bold text-slate-100">Step 1: Link Ethical Decisions to Real Numbers</h3>
-                    <p className="text-xs text-slate-300 mt-1">
-                      Choose an action in each of the short case studies below. Your selections will instantly load real-world metrics into the **SROI** and **CFA** laboratories on the next tabs!
-                    </p>
-                    <span className="text-xs text-slate-400 italic font-sinhala font-medium block mt-1">
-                      පහත දැක්වෙන සිද්ධි අධ්‍යයන සඳහා සුදුසු තීරණය තෝරන්න. එය ඊළඟ ටැබ් වල ඇති SROI සහ CFA ගණක යන්ත්‍ර ස්වයංක්‍රීයව වෙනස් කරනු ඇත.
-                    </span>
-                  </div>
+              <span class="text-2xl font-bold text-slate-400 hidden sm:block">=</span>
 
-                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    
-                    {/* CASE STUDY A: Aegis-9 Microchip recall */}
-                    <div className="p-5 rounded-xl bg-slate-900/60 border border-slate-800 flex flex-col justify-between">
-                      <div>
-                        <div className="flex items-center justify-between">
-                          <span className="text-[10px] bg-red-500/10 text-red-400 px-2.5 py-0.5 rounded font-mono font-bold">CASE A: THE AEGIS-9 CRISIS</span>
-                          <span className="text-xs text-slate-500 font-mono">NexusCore Technologies</span>
-                        </div>
-                        <h4 className="text-sm font-bold text-slate-200 mt-3">Dr. Elena Vance discovers Aegis-9 chips suffer severe thermal leaks under heavy processing loads. Shipping them immediately preserves immediate $150M revenue but puts lives at risk.</h4>
-                        <span className="text-xs text-slate-500 italic font-sinhala font-medium block mt-2">
-                          ප්‍රොසෙසරයේ ඇති තාප කාන්දු වීමේ දෝෂය හෙළිදරව් කර ව්‍යාපෘතිය නවත්වනවාද, නැතහොත් ලාභය තකා එය පාරිභෝගිකයාගෙන් වසන් කරනවාද?
-                        </span>
-                      </div>
-
-                      <div className="mt-6 space-y-2">
-                        <button 
-                          type="button"
-                          onClick={() => applyRecallDecision('ethical')}
-                          className={`w-full p-3.5 rounded-xl text-left border transition-all cursor-pointer ${selectedChipAction === 'ethical' ? 'bg-brand-950/40 border-brand-500 shadow-md' : 'bg-slate-950 hover:bg-slate-900 border-slate-850'}`}
-                        >
-                          <div className="flex justify-between items-center">
-                            <span className="font-bold text-brand-400 text-xs">Path A1: Ethical Disclosure & Full Recycle</span>
-                            <span className="text-[9px] bg-brand-500/15 text-brand-400 px-2 py-0.5 rounded font-mono font-bold">TBL Standard</span>
-                          </div>
-                          <p className="text-[11px] text-slate-300 mt-1">Sacrifice short-term revenue to maintain long-term consumer trust. Recycle defective metal stock.</p>
-                          <span className="text-[9px] text-slate-500 font-sinhala italic block mt-1">පාරිභෝගික සුරක්ෂිතතාවය තෝරාගෙන කෙටි කාලීන මූල්‍ය පාඩුව විඳ දරාගැනීම.</span>
-                        </button>
-
-                        <button 
-                          type="button"
-                          onClick={() => applyRecallDecision('unethical')}
-                          className={`w-full p-3.5 rounded-xl text-left border transition-all cursor-pointer ${selectedChipAction === 'unethical' ? 'bg-red-950/20 border-red-500/40 shadow-md' : 'bg-slate-950 hover:bg-slate-900 border-slate-850'}`}
-                        >
-                          <div className="flex justify-between items-center">
-                            <span className="font-bold text-red-400 text-xs">Path A2: Conceal & Deploy Silent Firmware Patch</span>
-                            <span className="text-[9px] bg-red-500/10 text-red-400 px-2 py-0.5 rounded font-mono font-bold">Profit Focus</span>
-                          </div>
-                          <p className="text-[11px] text-slate-300 mt-1">Ship anyway. Quietly limit processor performance by 15% to avoid explosions, deceiving customers.</p>
-                          <span className="text-[9px] text-slate-500 font-sinhala italic block mt-1">දෝෂය වසා දමා රහසිගත මෘදුකාංග යාවත්කාලීන මඟින් කාර්ය සාධනය අඩු කිරීම.</span>
-                        </button>
-                      </div>
-
-                      {selectedChipAction && (
-                        <div className="mt-4 p-3 bg-slate-950 rounded-lg border border-slate-800 text-[11px] space-y-2 animate-fadeIn">
-                          <div className="flex justify-between items-center">
-                            <span className="text-slate-400">Values linked to SROI Lab:</span>
-                            <span className="text-brand-400 font-bold font-mono">
-                              {selectedChipAction === 'ethical' ? 'V_fin = $40M, V_soc = $120M, V_env = $90M, I_tot = $100M' : 'V_fin = $150M, V_soc = $10M, V_env = $5M, I_tot = $110M'}
-                            </span>
-                          </div>
-                          <div className="pt-2 border-t border-slate-850 flex justify-between items-center">
-                            <span className="text-slate-400">Calculated Decision SROI:</span>
-                            <span className={`font-bold font-mono text-xs ${selectedChipAction === 'ethical' ? 'text-brand-400' : 'text-red-400'}`}>
-                              {selectedChipAction === 'ethical' ? '2.50x SROI (Strong Balance!)' : '1.50x SROI (Unbalanced/Ethically Vulnerable)'}
-                            </span>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-
-                    {/* CASE STUDY B: The Eco-Grid Upgrade */}
-                    <div className="p-5 rounded-xl bg-slate-900/60 border border-slate-800 flex flex-col justify-between">
-                      <div>
-                        <div className="flex items-center justify-between">
-                          <span className="text-[10px] bg-blue-500/10 text-tech-400 px-2.5 py-0.5 rounded font-mono font-bold">CASE B: ECO-EFFICIENCY UPGRADE</span>
-                          <span className="text-xs text-slate-500 font-mono">Production Facility Upgrades</span>
-                        </div>
-                        <h4 className="text-sm font-bold text-slate-200 mt-3">The main factory energy grid must be upgraded to reduce emissions. Selecting high-quality clean technology cuts long-term footprint but demands high initial embedded materials setup.</h4>
-                        <span className="text-xs text-slate-500 italic font-sinhala font-medium block mt-2">
-                          කාබන් විමෝචනය අවම කිරීම සඳහා කර්මාන්තශාලා බලශක්ති පද්ධතිය නවීකරණය කිරීමේ විකල්ප සැසඳීම.
-                        </span>
-                      </div>
-
-                      <div className="mt-6 space-y-2">
-                        <button 
-                          type="button"
-                          onClick={() => applyUpgradeDecision('solar')}
-                          className={`w-full p-3.5 rounded-xl text-left border transition-all cursor-pointer ${selectedGridAction === 'solar' ? 'bg-brand-950/40 border-brand-500 shadow-md' : 'bg-slate-950 hover:bg-slate-900 border-slate-850'}`}
-                        >
-                          <div className="flex justify-between items-center">
-                            <span className="font-bold text-brand-400 text-xs">Path B1: Renewable Solar Smart-Grid Upgrade</span>
-                            <span className="text-[9px] bg-brand-500/15 text-brand-400 px-2 py-0.5 rounded font-mono font-bold">High Offset</span>
-                          </div>
-                          <p className="text-[11px] text-slate-300 mt-1">Excellent carbon offsets. Moderate initial manufacturing footprint, outstanding annual carbon saving rate.</p>
-                          <span className="text-[9px] text-slate-500 font-sinhala italic block mt-1">තිරසාර සූර්ය බලශක්ති පද්ධතියක් ස්ථාපිත කිරීම - උපරිම වාර්ෂික කාබන් ඉතිරියක් ලැබේ.</span>
-                        </button>
-
-                        <button 
-                          type="button"
-                          onClick={() => applyUpgradeDecision('coal')}
-                          className={`w-full p-3.5 rounded-xl text-left border transition-all cursor-pointer ${selectedGridAction === 'coal' ? 'bg-red-950/20 border-red-500/40 shadow-md' : 'bg-slate-950 hover:bg-slate-900 border-slate-850'}`}
-                        >
-                          <div className="flex justify-between items-center">
-                            <span className="font-bold text-red-400 text-xs">Path B2: Standard Gas-Powered Upgrade</span>
-                            <span className="text-[9px] bg-red-500/10 text-red-400 px-2 py-0.5 rounded font-mono font-bold">Fossil Fuel</span>
-                          </div>
-                          <p className="text-[11px] text-slate-300 mt-1">Heavy raw infrastructure footprint. High annual upkeep emissions with poor emission offsetting efficiency.</p>
-                          <span className="text-[9px] text-slate-500 font-sinhala italic block mt-1">සම්මත ගෑස්/අඟුරු බලශක්තිය භාවිතය - මූලික පිරිවැය අඩු වුවද කාබන් විමෝචනය ඉහළය.</span>
-                        </button>
-                      </div>
-
-                      {selectedGridAction && (
-                        <div className="mt-4 p-3 bg-slate-950 rounded-lg border border-slate-800 text-[11px] space-y-2 animate-fadeIn">
-                          <div className="flex justify-between items-center">
-                            <span className="text-slate-400">Values linked to CFA Lab:</span>
-                            <span className="text-brand-400 font-bold font-mono">
-                              {selectedGridAction === 'solar' ? 'E_embed = 220, E_savings = 75, E_maint = 10' : 'E_embed = 450, E_savings = 20, E_maint = 40'}
-                            </span>
-                          </div>
-                          <div className="pt-2 border-t border-slate-850 flex justify-between items-center">
-                            <span className="text-slate-400">Calculated Payback Period:</span>
-                            <span className={`font-bold font-mono text-xs ${selectedGridAction === 'solar' ? 'text-brand-400' : 'text-red-400 animate-pulse'}`}>
-                              {selectedGridAction === 'solar' ? '3.4 Years (Highly Efficient)' : 'Never Pays Back (Fossil Fuel Carbon Trap!)'}
-                            </span>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-
-                  </div>
-
-                  {/* Navigation prompt block */}
-                  <div className="p-4 bg-slate-900 border border-slate-800 rounded-xl flex items-center justify-between text-xs">
-                    <div>
-                      <span className="font-bold text-slate-200">Ready to analyze the SROI and CFA mathematics?</span>
-                      <span className="text-[10px] text-slate-500 font-sinhala italic block">ගණනය කිරීම් සහ ප්‍රායෝගික සූත්‍ර විශ්ලේෂණය සඳහා සූදානම්ද?</span>
-                    </div>
-                    <button 
-                      type="button"
-                      onClick={() => setActiveTab('sroi')}
-                      className="flex items-center gap-2 bg-brand-500 hover:bg-brand-600 text-slate-950 font-bold px-4 py-2 rounded-lg transition-all cursor-pointer"
-                    >
-                      <span>Proceed to SROI Lab</span>
-                      <IconArrow />
-                    </button>
-                  </div>
-                </div>
-              )}
-
-              {/* TAB 2: SROI IMPACT LAB */}
-              {activeTab === 'sroi' && (
-                <div className="space-y-6 animate-fadeIn">
-                  
-                  {/* Explanatory introduction card */}
-                  <div className="p-5 rounded-2xl bg-gradient-to-r from-brand-900/20 to-slate-900/50 border border-brand-500/20">
-                    <span className="text-xs text-brand-400 font-bold uppercase tracking-wider block">Social Return on Investment (SROI)</span>
-                    <h3 className="text-lg font-bold text-slate-100">Quantifying Corporate Morality via Triple Bottom Line</h3>
-                    <p className="text-xs text-slate-300 mt-1">
-                      {"Business ethics must go beyond statements. Standard ROI only tracks financial gain ($V_{financial}$). Sustainable ROI (SROI) monetizes and adds Social ($V_{social}$) and Ecological ($V_{environmental}$) values."}
-                    </p>
-                    <span className="text-xs text-slate-400 italic font-sinhala font-medium block mt-1.5">
-                      සාම්ප්‍රදායික මූල්‍ය ප්‍රතිලාභ (ROI) මනින සූත්‍රයෙන් ඔබ්බට යමින්, ව්‍යාපෘතියක් මඟින් සමාජයට (Social) සහ පරිසරයට (Environmental) එක් කරන වටිනාකම් මූල්‍යමය වශයෙන් ගණනය කිරීම මෙහිදී සිදු කෙරේ.
-                    </span>
-                  </div>
-
-                  {/* Interactive SROI Fraction Visualization Area */}
-                  <div className="p-6 rounded-xl bg-slate-900/40 border border-slate-800 flex flex-col items-center justify-center space-y-4">
-                    <span className="text-xs text-slate-400 font-mono font-bold tracking-widest">LIVE SROI FORMULA FRACTION</span>
-                    
-                    <div className="flex items-center gap-4">
-                      {/* Left Side Fraction */}
-                      <div className="flex flex-col items-center">
-                        {/* Numerator */}
-                        <div className="text-sm font-semibold text-slate-300 pb-2 border-b-2 border-slate-700 text-center flex items-center gap-1.5 font-mono">
-                          <span className="text-blue-400 font-bold">${vFin}M</span>
-                          <span>+</span>
-                          <span className="text-emerald-400 font-bold">${vSoc}M</span>
-                          <span>+</span>
-                          <span className="text-teal-400 font-bold">${vEnv}M</span>
-                        </div>
-                        {/* Denominator */}
-                        <div className="text-sm font-semibold text-slate-400 pt-2 text-center font-mono text-purple-400">
-                          ${iTot}M
-                        </div>
-                      </div>
-
-                      {/* Equal Sign */}
-                      <span className="text-2xl font-bold text-slate-400">=</span>
-
-                      {/* Final Result Block */}
-                      <div className="p-3 bg-slate-950 border border-slate-800 rounded-xl text-center">
-                        <span className={`text-3xl font-black font-mono tracking-tight block ${Number(sroiResult) >= 1.5 ? 'text-brand-400' : Number(sroiResult) >= 1.0 ? 'text-amber-400' : 'text-red-400 animate-pulse'}`}>
-                          {sroiResult}x
-                        </span>
-                        <span className="text-[10px] text-slate-500 uppercase tracking-widest font-mono font-bold">SROI RATIO</span>
-                      </div>
-                    </div>
-
-                    <p className="text-xs text-slate-400 text-center max-w-lg font-mono">
-                      {"$$\\text{SROI} = \\frac{V_{\\text{financial}} + V_{\\text{social}} + V_{\\text{environmental}}}{I_{\\text{total}}}$$"}
-                    </p>
-                  </div>
-
-                  {/* Sliders Control Deck */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    
-                    {/* Tweakable Sliders */}
-                    <div className="p-5 rounded-xl bg-slate-900/60 border border-slate-800 space-y-4">
-                      <h4 className="text-xs font-bold text-slate-300 uppercase tracking-widest mb-2">Adjust Values (අගයන් වෙනස් කරන්න)</h4>
-                      
-                      {/* Financial slider */}
-                      <div className="space-y-1">
-                        <div className="flex justify-between text-xs">
-                          <span className="text-slate-300 font-medium">Financial Value Gain (V_financial)</span>
-                          <span className="text-blue-400 font-mono font-bold">${vFin}M</span>
-                        </div>
-                        <input 
-                          type="range" min="5" max="250" value={vFin} 
-                          onChange={(e) => setVFin(Number(e.target.value))} 
-                          className="w-full accent-blue-500 bg-slate-800 rounded-lg h-1.5 cursor-pointer relative z-40" 
-                        />
-                        <span className="text-[10px] text-slate-500 font-sinhala italic block leading-none">කෙටි කාලීන මූල්‍යමය ප්‍රතිලාභය</span>
-                      </div>
-
-                      {/* Social slider */}
-                      <div className="space-y-1">
-                        <div className="flex justify-between text-xs">
-                          <span className="text-slate-300 font-medium">Preserved Social Trust (V_social)</span>
-                          <span className="text-emerald-400 font-mono font-bold">${vSoc}M</span>
-                        </div>
-                        <input 
-                          type="range" min="0" max="200" value={vSoc} 
-                          onChange={(e) => setVSoc(Number(e.target.value))} 
-                          className="w-full accent-brand-500 bg-slate-800 rounded-lg h-1.5 cursor-pointer relative z-40" 
-                        />
-                        <span className="text-[10px] text-slate-500 font-sinhala italic block leading-none">සමාජීය විශ්වාසය සහ වගකීම</span>
-                      </div>
-
-                      {/* Environmental slider */}
-                      <div className="space-y-1">
-                        <div className="flex justify-between text-xs">
-                          <span className="text-slate-300 font-medium">Ecological Stewardship (V_environmental)</span>
-                          <span className="text-teal-400 font-mono font-bold">${vEnv}M</span>
-                        </div>
-                        <input 
-                          type="range" min="0" max="200" value={vEnv} 
-                          onChange={(e) => setVEnv(Number(e.target.value))} 
-                          className="w-full accent-teal-400 bg-slate-800 rounded-lg h-1.5 cursor-pointer relative z-40" 
-                        />
-                        <span className="text-[10px] text-slate-500 font-sinhala italic block leading-none">පරිසර පද්ධතියට සිදු කරන දායකත්වය</span>
-                      </div>
-
-                      {/* Total Investment slider */}
-                      <div className="space-y-1">
-                        <div className="flex justify-between text-xs">
-                          <span className="text-slate-300 font-medium">Total Resource Investment (I_total)</span>
-                          <span className="text-purple-400 font-mono font-bold">${iTot}M</span>
-                        </div>
-                        <input 
-                          type="range" min="50" max="350" value={iTot} 
-                          onChange={(e) => setITot(Number(e.target.value))} 
-                          className="w-full accent-purple-500 bg-slate-800 rounded-lg h-1.5 cursor-pointer relative z-40" 
-                        />
-                        <span className="text-[10px] text-slate-500 font-sinhala italic block leading-none">ව්‍යාපෘතිය සඳහා වැය වන මුළු ප්‍රාග්ධනය</span>
-                      </div>
-                    </div>
-
-                    {/* Mathematical Consequence Explanation */}
-                    <div className="p-5 rounded-xl bg-slate-900/60 border border-slate-800 flex flex-col justify-between">
-                      <div>
-                        <h4 className="text-xs font-bold text-slate-300 uppercase tracking-widest mb-3">Mathematical Audit Analysis</h4>
-                        
-                        {Number(sroiResult) >= 1.5 ? (
-                          <div className="p-4 rounded-xl bg-brand-950/20 border border-brand-500/20 space-y-2 animate-slideUp">
-                            <span className="text-xs font-bold text-brand-400 block uppercase font-mono">🌟 EXCELLENT TRIPLE BOTTOM LINE COMPLIANCE</span>
-                            <p className="text-xs text-slate-300 leading-relaxed">
-                              This project is a sustainable success. The social trust and ecological restoration benefits heavily exceed the initial capital required. Ideal for ESG certification.
-                            </p>
-                            <span className="text-xs text-slate-500 italic font-sinhala font-medium block">
-                              විශිෂ්ට තිරසාරභාවයක් සහිත ව්‍යාපෘතියකි. මූල්‍ය නොවන (සමාජීය සහ පාරිසරික) වටිනාකම් විශාල වශයෙන් සුරැකී ඇත.
-                            </span>
-                          </div>
-                        ) : Number(sroiResult) >= 1.0 ? (
-                          <div className="p-4 rounded-xl bg-amber-950/20 border border-amber-500/20 space-y-2 animate-slideUp">
-                            <span className="text-xs font-bold text-amber-400 block uppercase font-mono">⚖️ MODERATE TRIPLE BOTTOM LINE ALIGNMENT</span>
-                            <p className="text-xs text-slate-300 leading-relaxed">
-                              The project generates value but lacks strong environmental or social buffers. Tweak the sliders to increase social trust or ecology parameters to achieve maximum ESG balance.
-                            </p>
-                            <span className="text-xs text-slate-500 italic font-sinhala font-medium block">
-                              සාමාන්‍ය මට්ටමේ තිරසාරභාවයක් ඇත. පාරිසරික හෝ සමාජීය වටිනාකම් තවත් වැඩි දියුණු කිරීමට උත්සාහ කරන්න.
-                            </span>
-                          </div>
-                        ) : (
-                          <div className="p-4 rounded-xl bg-red-950/20 border border-red-500/20 space-y-2 animate-pulse">
-                            <span className="text-xs font-bold text-red-400 block uppercase font-mono">⚠️ CRITICAL VALUES FAILURE (UNSUSTAINABLE)</span>
-                            <p className="text-xs text-slate-300 leading-relaxed">
-                              Warning! Short-term financial prioritisation has compromised corporate reputation and environmental safety. SROI under 1.0x indicates terminal stakeholder value depletion.
-                            </p>
-                            <span className="text-xs text-slate-500 italic font-sinhala font-medium block">
-                              අනතුරු ඇඟවීමකි! මූල්‍යමය ලාභය පමණක් සලකා කටයුතු කිරීම නිසා සමාජීය හා පාරිසරික අගයන් සම්පූර්ණයෙන්ම විනාශ වී ඇත.
-                            </span>
-                          </div>
-                        )}
-                      </div>
-
-                      <div className="pt-4 border-t border-slate-800 text-xs text-slate-400 leading-relaxed">
-                        <strong>Practical Session Insight:</strong> SROI illustrates that true corporate growth is a three-dimensional equilibrium of People, Planet, and Profit.
-                      </div>
-                    </div>
-
-                  </div>
-                </div>
-              )}
-
-              {/* TAB 3: CFA CARBON LAB */}
-              {activeTab === 'cfa' && (
-                <div className="space-y-6 animate-fadeIn">
-                  
-                  {/* Explanatory introduction card */}
-                  <div className="p-5 rounded-2xl bg-gradient-to-r from-brand-900/20 to-slate-900/50 border border-brand-500/20">
-                    <span className="text-xs text-brand-400 font-bold uppercase tracking-wider block">Carbon Footprint Amortization (CFA)</span>
-                    <h3 className="text-lg font-bold text-slate-100">Tracking Ecological Payback Periods</h3>
-                    <p className="text-xs text-slate-300 mt-1">
-                      {"Every green technology upgrade requires manufacturing raw resources, which releases carbon up front ($E_{embedded}$). Carbon Footprint Amortization calculates the number of years required for annual emissions savings to pay back this initial debt."}
-                    </p>
-                    <span className="text-xs text-slate-400 italic font-sinhala font-medium block mt-1.5">
-                      කාබන් පියසටහන් පියවීමේ සූත්‍රය මඟින් නව තාක්ෂණික උපාංග නිෂ්පාදනය සඳහා මුලින් වැය වූ කාබන් ප්‍රමාණය, එහි වාර්ෂික ඉතිරිය මඟින් සම්පූර්ණයෙන්ම පියවා ගැනීමට ගත වන වසර ගණන ගණනය කරයි.
-                    </span>
-                  </div>
-
-                  {/* Math Visualization Column */}
-                  <div className="p-5 rounded-xl bg-slate-900/40 border border-slate-800 flex flex-col items-center justify-center space-y-4">
-                    <span className="text-xs text-slate-400 font-mono font-bold tracking-widest">CFA MATHEMATICAL EQUATION</span>
-                    
-                    <div className="flex items-center gap-4">
-                      {/* Left Side Fraction */}
-                      <div className="flex flex-col items-center">
-                        {/* Numerator */}
-                        <div className="text-sm font-semibold text-slate-300 pb-2 border-b-2 border-slate-700 text-center font-mono text-blue-400">
-                          {eEmbed} tCO2e
-                        </div>
-                        {/* Denominator */}
-                        <div className="text-sm font-semibold text-slate-400 pt-2 text-center font-mono text-emerald-400">
-                          ({eSavings} - {eMaint}) tCO2e/year
-                        </div>
-                      </div>
-
-                      {/* Equal Sign */}
-                      <span className="text-2xl font-bold text-slate-400">=</span>
-
-                      {/* Final Result Block */}
-                      <div className="p-3 bg-slate-950 border border-slate-800 rounded-xl text-center">
-                        <span className={`text-3xl font-black font-mono tracking-tight block ${cfaResult === 'Infinity' || Number(cfaResult) > 8.0 ? 'text-amber-400' : 'text-brand-400'}`}>
-                          {cfaResult} Years
-                        </span>
-                        <span className="text-[10px] text-slate-500 uppercase tracking-widest font-mono font-bold">PAYBACK TIMEFRAME</span>
-                      </div>
-                    </div>
-
-                    <p className="text-xs text-slate-400 text-center max-w-lg font-mono">
-                      {"$$\\text{CFA} = \\frac{E_{\\text{embedded}}}{E_{\\text{annual\\_savings}} - E_{\\text{annual\\_maintenance}}}$$"}
-                    </p>
-                  </div>
-
-                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                    
-                    {/* CFA Sliders Panel */}
-                    <div className="p-5 rounded-xl bg-slate-900/60 border border-slate-800 space-y-4 lg:col-span-1">
-                      <div className="flex items-center justify-between border-b border-slate-800 pb-2">
-                        <h4 className="text-xs font-bold text-slate-300 uppercase tracking-widest">Tweak Variables</h4>
-                        <span className="px-1.5 py-0.5 bg-blue-900/30 text-[9px] text-blue-400 font-mono rounded border border-blue-500/20">Unit: tCO2e</span>
-                      </div>
-                      
-                      {/* Slider 1 */}
-                      <div className="space-y-1">
-                        <div className="flex justify-between text-xs">
-                          <span className="text-slate-300 font-medium">Embedded Asset Carbon (E_embedded)</span>
-                          <span className="text-blue-400 font-mono font-bold">{eEmbed} tCO2e</span>
-                        </div>
-                        <input 
-                          type="range" min="50" max="600" value={eEmbed} 
-                          onChange={(e) => setEEmbed(Number(e.target.value))} 
-                          className="w-full accent-blue-500 bg-slate-800 rounded-lg h-1.5 cursor-pointer relative z-40" 
-                        />
-                        <span className="text-[10px] text-slate-500 font-sinhala italic block leading-none">නිෂ්පාදනය සඳහා වැය වන මූලික කාබන් විමෝචනය</span>
-                      </div>
-
-                      {/* Slider 2 */}
-                      <div className="space-y-1">
-                        <div className="flex justify-between text-xs">
-                          <span className="text-slate-300 font-medium">Annual Carbon Savings (E_savings)</span>
-                          <span className="text-emerald-400 font-mono font-bold">{eSavings} tCO2e</span>
-                        </div>
-                        <input 
-                          type="range" min="5" max="150" value={eSavings} 
-                          onChange={(e) => setESavings(Number(e.target.value))} 
-                          className="w-full accent-brand-500 bg-slate-800 rounded-lg h-1.5 cursor-pointer relative z-40" 
-                        />
-                        <span className="text-[10px] text-slate-500 font-sinhala italic block leading-none">වාර්ෂිකව ඉතිරි කරන කාබන් විමෝචනය</span>
-                      </div>
-
-                      {/* Slider 3 */}
-                      <div className="space-y-1">
-                        <div className="flex justify-between text-xs">
-                          <span className="text-slate-300 font-medium">Annual Maintenance carbon (E_maintenance)</span>
-                          <span className="text-red-400 font-mono font-bold">{eMaint} tCO2e</span>
-                        </div>
-                        <input 
-                          type="range" min="1" max="60" value={eMaint} 
-                          onChange={(e) => setEMaint(Number(e.target.value))} 
-                          className="w-full accent-red-400 bg-slate-800 rounded-lg h-1.5 cursor-pointer relative z-40" 
-                        />
-                        <span className="text-[10px] text-slate-500 font-sinhala italic block leading-none">වාර්ෂික නඩත්තුව සඳහා වැය වන කාබන් පිරිවැය</span>
-                      </div>
-                    </div>
-
-                    {/* Step-by-Step Amortization Timeline Visualization */}
-                    <div className="p-5 rounded-xl bg-slate-900/60 border border-slate-800 space-y-4 lg:col-span-2 flex flex-col justify-between">
-                      <div>
-                        <h4 className="text-xs font-bold text-slate-300 uppercase tracking-widest mb-1.5">Projected Carbon Offset Timeline</h4>
-                        <span className="text-[10px] text-slate-500 font-sinhala italic block mb-3">කාබන් පිරිවැය පියවීමේ වාර්ෂික ප්‍රගති නිරූපණය</span>
-                        
-                        {carbonDifference <= 0 ? (
-                          <div className="p-4 rounded-lg bg-red-950/20 border border-red-500/20 text-red-400 text-xs">
-                            <strong>Critical Carbon Trap!</strong> Annual maintenance emissions exceed annual savings. This asset will never pay back its carbon debt. Amortization is impossible.
-                          </div>
-                        ) : (
-                          <div className="space-y-2.5">
-                            {[1, 2, 3, 4, 5, 6, 7, 8].map((year) => {
-                              // Calculate remaining carbon debt for each year
-                              const remainingDebt = Math.max(0, eEmbed - (year * carbonDifference));
-                              const percentage = ((remainingDebt / eEmbed) * 100).toFixed(0);
-                              
-                              return (
-                                <div key={year} className="flex items-center gap-3 text-xs">
-                                  <span className="w-16 font-mono text-slate-400 shrink-0">Year 0{year}:</span>
-                                  <div className="flex-1 bg-slate-950 h-5 rounded-lg overflow-hidden border border-slate-850 relative flex items-center px-2">
-                                    <div 
-                                      className="h-full bg-gradient-to-r from-emerald-500/80 to-blue-500/80 absolute left-0 top-0 transition-all duration-300" 
-                                      style={{ width: `${percentage}%` }}
-                                    ></div>
-                                    <span className="relative z-10 font-mono text-[10px] font-bold text-slate-200 ml-auto">
-                                      {remainingDebt > 0 ? `${remainingDebt.toFixed(0)} tCO2e left (${percentage}%)` : 'Amortized! ✓'}
-                                    </span>
-                                  </div>
-                                </div>
-                              );
-                            })}
-                          </div>
-                        )}
-                      </div>
-
-                      <div className="pt-4 border-t border-slate-800 text-[11px] text-slate-400 leading-normal">
-                        <strong>Student Tip:</strong> Think of <strong>tCO2e</strong> like financial debt. The faster we repay it with annual savings, the better for our ecological balance sheet.
-                      </div>
-                    </div>
-
-                  </div>
-                </div>
-              )}
-
-              {/* TAB 4: BREAKOUT CHALLENGES */}
-              {activeTab === 'breakout' && (
-                <div className="space-y-6 animate-fadeIn">
-                  <div className="mb-2">
-                    <h3 className="text-lg font-bold text-white">Dynamic Breakout Challenges: 30-Minute Sessions</h3>
-                    <p className="text-xs text-slate-400 italic font-sinhala">කණ්ඩායම් සාකච්ඡා සහ වෘත්තීයවේදය ක්‍රියාකාරී ඇගයීම</p>
-                  </div>
-
-                  {/* 3 streamlined high-impact debate cards */}
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    
-                    {/* Prompt 1 */}
-                    <div className="p-5 rounded-xl bg-slate-900/60 border border-slate-800 flex flex-col justify-between">
-                      <div>
-                        <span className="text-[10px] bg-emerald-500/10 text-emerald-400 px-2.5 py-0.5 rounded font-mono font-bold block w-max mb-3">CHALLENGE 01</span>
-                        <h4 className="text-xs font-bold text-slate-200 uppercase tracking-wider">The SROI Debate (TBL Trade-offs)</h4>
-                        <p className="text-xs text-slate-300 leading-relaxed mt-2">
-                          If a project has an excellent Financial ROI but a terrible SROI (less than 0.5x), should a corporate manager recuse or cancel? How do we balance shareholders against consumer health?
-                        </p>
-                        <span className="text-xs text-slate-400 italic font-sinhala font-medium block mt-2.5 leading-normal">
-                          සාම්ප්‍රදායික මූල්‍ය ලාභය අතිශය ඉහළ වුවද, සමාජීය හා පාරිසරික වටිනාකම් විනාශ වන්නේ නම් ව්‍යාපෘතිය අත්හැර දැමිය යුතුද?
-                        </span>
-                      </div>
-                    </div>
-
-                    {/* Prompt 2 */}
-                    <div className="p-5 rounded-xl bg-slate-900/60 border border-slate-800 flex flex-col justify-between">
-                      <div>
-                        <span className="text-[10px] bg-blue-500/10 text-tech-400 px-2.5 py-0.5 rounded font-mono font-bold block w-max mb-3">CHALLENGE 02</span>
-                        <h4 className="text-xs font-bold text-slate-200 uppercase tracking-wider">Decoupling Carbon Traps</h4>
-                        <p className="text-xs text-slate-300 leading-relaxed mt-2">
-                          Explain how high annual maintenance emissions can lead to a "Carbon Trap" (un-amortizable status) in green technologies. What design changes reduce initial embedded footprint?
-                        </p>
-                        <span className="text-xs text-slate-400 italic font-sinhala font-medium block mt-2.5 leading-normal">
-                          නව තාක්ෂණයන් ස්ථාපිත කිරීමේදී සිදුවන මූලික කාබන් විමෝචනය අවම කිරීම සහ නඩත්තු පිරිවැය පියවා ගැනීමේ ගැටලු සාකච්ඡා කරන්න.
-                        </span>
-                      </div>
-                    </div>
-
-                    {/* Prompt 3 */}
-                    <div className="p-5 rounded-xl bg-slate-900/60 border border-slate-800 flex flex-col justify-between">
-                      <div>
-                        <span className="text-[10px] bg-purple-500/10 text-purple-400 px-2.5 py-0.5 rounded font-mono font-bold block w-max mb-3">CHALLENGE 03</span>
-                        <h4 className="text-xs font-bold text-slate-200 uppercase tracking-wider">The Conflict of Interest Protocol</h4>
-                        <p className="text-xs text-slate-300 leading-relaxed mt-2">
-                          Analyze the 4-step COI protocol from the notes: 1. Identification, 2. Disclosure, 3. Recusal, and 4. Independent Audit. How does this prevent public relations disasters?
-                        </p>
-                        <span className="text-xs text-slate-400 italic font-sinhala font-medium block mt-2.5 leading-normal">
-                          වෘත්තීය ආචාරධර්ම වල දැක්වෙන ඥාති හෝ පෞද්ගලික ලාභ ගැටුම් (COI) වළක්වා ගැනීමේ පියවර 4 සාකච්ඡා කරන්න.
-                        </span>
-                      </div>
-                    </div>
-
-                  </div>
-
-                  {/* COI Protocol Cheatsheet Display */}
-                  <div className="p-6 rounded-xl bg-slate-950 border border-slate-850">
-                    <h4 className="text-xs font-mono font-bold text-brand-400 uppercase tracking-widest mb-3">Fiduciary Virtues Cheat Sheet (OBISL Standard)</h4>
-                    <div className="grid grid-cols-1 md:grid-cols-4 gap-4 text-xs">
-                      <div className="p-3 bg-slate-900 rounded-lg border border-slate-800">
-                        <span className="font-bold text-slate-200 block">1. Identify (හඳුනාගැනීම)</span>
-                        <p className="text-slate-400 mt-1">Recognise situations where personal interests conflict with corporate duty.</p>
-                      </div>
-                      <div className="p-3 bg-slate-900 rounded-lg border border-slate-800">
-                        <span className="font-bold text-slate-200 block">2. Disclose (හෙළිදරව් කිරීම)</span>
-                        <p className="text-slate-400 mt-1">Formally notify compliance or boardroom members about family or personal ties.</p>
-                      </div>
-                      <div className="p-3 bg-slate-900 rounded-lg border border-slate-800">
-                        <span className="font-bold text-slate-200 block">3. Recuse (ඉවත් වීම)</span>
-                        <p className="text-slate-400 mt-1">Remove yourself completely from final evaluation or decision panels.</p>
-                      </div>
-                      <div className="p-3 bg-slate-900 rounded-lg border border-slate-800">
-                        <span className="font-bold text-slate-200 block">4. Audit (විගණනය)</span>
-                        <p className="text-slate-400 mt-1">Allow neutral independent committees to review procurement process.</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )}
-
+              <!-- Live result display card -->
+              <div class="p-4 bg-slate-950 border border-slate-800 rounded-2xl text-center min-w-32 shadow-lg w-full sm:w-auto">
+                <span id="card-sroi-out" class="text-3xl lg:text-4xl font-black font-mono tracking-tight block text-brand-400">1.50x</span>
+                <span class="text-[9px] lg:text-[10px] text-slate-500 uppercase tracking-widest font-mono font-bold" id="card-sroi-lbl">SROI Ratio</span>
+              </div>
             </div>
 
-            {/* Print Area Footer */}
-            <div className="hidden print:block border-t border-slate-300 pt-6 mt-8 text-center text-[10px] text-black font-sans">
-              <p className="font-bold">OBISL Campus • Certificate in Business Management Skills (CBMS)</p>
-              <p className="italic">Module 3: Business Ethics & Professionalism Practicum Manual</p>
-              <p className="mt-1 font-mono">Date Printed: {new Date().toLocaleDateString()}</p>
+            <!-- LaTeX equation target -->
+            <div class="text-[11px] lg:text-xs text-slate-400 text-center max-w-full overflow-x-auto font-mono py-2.5 bg-slate-950/60 px-4 rounded-lg border border-slate-900 w-full" id="latex-sroi-formula">
+              $$\text{SROI} = \frac{V_{\text{financial}} + V_{\text{social}} + V_{\text{environmental}}}{I_{\text{total}}}$$
+            </div>
+          </div>
+
+          <!-- Slider Inputs & Audit card -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Slider parameters panel -->
+            <div class="p-4 lg:p-5 rounded-xl bg-slate-900/60 border border-slate-800 space-y-5">
+              <h4 class="text-xs font-bold text-slate-300 uppercase tracking-widest mb-2 border-b border-slate-800 pb-2" id="sroi-adjust-title">Adjust Variables</h4>
+              
+              <!-- Slider V_financial -->
+              <div class="space-y-2">
+                <div class="flex justify-between text-xs">
+                  <span class="text-slate-300 font-medium" id="lbl-sld-vfin">Financial Gain (V_fin)</span>
+                  <span class="text-blue-400 font-mono font-bold" id="val-sld-vfin">$100M</span>
+                </div>
+                <input type="range" min="5" max="250" value="100" id="sld-vfin" oninput="updateSroiValues()" class="w-full accent-blue-500 bg-slate-800 rounded-lg h-3 cursor-pointer touch-none">
+              </div>
+
+              <!-- Slider V_social -->
+              <div class="space-y-2">
+                <div class="flex justify-between text-xs">
+                  <span class="text-slate-300 font-medium" id="lbl-sld-vsoc">Social Trust (V_soc)</span>
+                  <span class="text-emerald-400 font-mono font-bold" id="val-sld-vsoc">$75M</span>
+                </div>
+                <input type="range" min="0" max="200" value="75" id="sld-vsoc" oninput="updateSroiValues()" class="w-full accent-emerald-500 bg-slate-800 rounded-lg h-3 cursor-pointer touch-none">
+              </div>
+
+              <!-- Slider V_environmental -->
+              <div class="space-y-2">
+                <div class="flex justify-between text-xs">
+                  <span class="text-slate-300 font-medium" id="lbl-sld-venv">Environmental Trust (V_env)</span>
+                  <span class="text-teal-400 font-mono font-bold" id="val-sld-venv">$45M</span>
+                </div>
+                <input type="range" min="0" max="200" value="45" id="sld-venv" oninput="updateSroiValues()" class="w-full accent-teal-400 bg-slate-800 rounded-lg h-3 cursor-pointer touch-none">
+              </div>
+
+              <!-- Slider I_total -->
+              <div class="space-y-2">
+                <div class="flex justify-between text-xs">
+                  <span class="text-slate-300 font-medium" id="lbl-sld-itot">Total Investment (I_total)</span>
+                  <span class="text-purple-400 font-mono font-bold" id="val-sld-itot">$120M</span>
+                </div>
+                <input type="range" min="50" max="350" value="120" id="sld-itot" oninput="updateSroiValues()" class="w-full accent-purple-500 bg-slate-800 rounded-lg h-3 cursor-pointer touch-none">
+              </div>
             </div>
 
-          </main>
-        </div>
-      );
+            <!-- Mathematical Audit Results card -->
+            <div class="p-4 lg:p-5 rounded-xl bg-slate-900/60 border border-slate-800 flex flex-col justify-between">
+              <div class="space-y-4">
+                <h4 class="text-xs font-bold text-slate-300 uppercase tracking-widest border-b border-slate-800 pb-2" id="sroi-audit-lbl">Compliance Audit</h4>
+                
+                <div id="sroi-audit-card">
+                  <!-- Dynamically populated via script -->
+                </div>
+              </div>
+
+              <div class="pt-4 border-t border-slate-800 text-xs text-slate-400 leading-relaxed flex items-center gap-2.5 mt-4">
+                <svg class="w-5 h-5 text-brand-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
+                <strong id="sroi-insight-text">SROI proves growth is an equilibrium of People, Planet, and Profit.</strong>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- TAB 3: CFA CARBON LAB -->
+        <section id="tab-cfa" class="workspace-tab space-y-6 hidden">
+          <div class="p-4 lg:p-5 rounded-2xl bg-gradient-to-r from-brand-900/20 to-slate-900/50 border border-brand-500/20">
+            <span class="text-xs text-brand-400 font-bold uppercase tracking-wider block" id="cfa-panel-tag">Carbon Footprint Amortization (CFA)</span>
+            <h3 class="text-base lg:text-lg font-bold text-slate-100" id="cfa-panel-title">Tracking Environmental Payback Timelines</h3>
+            <p class="text-xs text-slate-300 mt-2.5 leading-relaxed" id="cfa-panel-desc">Details regarding embedded offsets.</p>
+          </div>
+
+          <!-- Formula board -->
+          <div class="p-5 rounded-xl bg-slate-900/40 border border-slate-800 flex flex-col items-center justify-center space-y-4">
+            <span class="text-xs text-slate-400 font-mono font-bold tracking-widest text-center" id="cfa-eq-lbl">CFA PAYBACK AMORTIZATION MATHEMATICS</span>
+            
+            <div class="flex flex-col sm:flex-row items-center gap-6 w-full justify-center">
+              <div class="flex flex-col items-center">
+                <!-- Numerator -->
+                <div class="text-xs lg:text-sm font-semibold text-slate-300 pb-2 border-b-2 border-slate-700 text-center font-mono text-blue-400" id="eq-cfa-embed">
+                  300 tCO2e
+                </div>
+                <!-- Denominator -->
+                <div class="text-xs lg:text-sm font-semibold text-slate-400 pt-2 text-center font-mono text-emerald-400" id="eq-cfa-diff">
+                  (60 - 15) tCO2e/year
+                </div>
+              </div>
+
+              <span class="text-2xl font-bold text-slate-400 hidden sm:block">=</span>
+
+              <!-- Live outcome card -->
+              <div class="p-4 bg-slate-950 border border-slate-800 rounded-2xl text-center min-w-32 shadow-lg w-full sm:w-auto">
+                <span id="card-cfa-out" class="text-2xl lg:text-3xl font-black font-mono tracking-tight block text-brand-400">6.7 Yrs</span>
+                <span class="text-[9px] lg:text-[10px] text-slate-500 uppercase tracking-widest font-mono font-bold" id="card-cfa-lbl">Amortization Period</span>
+              </div>
+            </div>
+
+            <!-- LaTeX equation target -->
+            <div class="text-[11px] lg:text-xs text-slate-400 text-center max-w-full overflow-x-auto font-mono py-2.5 bg-slate-950/60 px-4 rounded-lg border border-slate-900 w-full" id="latex-cfa-formula">
+              $$\text{CFA} = \frac{E_{\text{embedded}}}{E_{\text{annual\_savings}} - E_{\text{annual\_maintenance}}}$$
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- Sliders Panel -->
+            <div class="p-4 lg:p-5 rounded-xl bg-slate-900/60 border border-slate-800 space-y-4 lg:col-span-1">
+              <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+                <h4 class="text-xs font-bold text-slate-300 uppercase tracking-widest" id="cfa-adjust-title">Tweak Variables</h4>
+                <span class="px-1.5 py-0.5 bg-blue-900/30 text-[9px] text-blue-400 font-mono rounded border border-blue-500/20">tCO2e</span>
+              </div>
+              
+              <!-- Slider 1 -->
+              <div class="space-y-2">
+                <div class="flex justify-between text-xs">
+                  <span class="text-slate-300 font-medium" id="lbl-sld-eembed">Embedded Cost (E_embed)</span>
+                  <span class="text-blue-400 font-mono font-bold" id="val-sld-eembed">300 tCO2e</span>
+                </div>
+                <input type="range" min="50" max="600" value="300" id="sld-eembed" oninput="updateCfaValues()" class="w-full accent-blue-500 bg-slate-800 rounded-lg h-3 cursor-pointer touch-none">
+              </div>
+
+              <!-- Slider 2 -->
+              <div class="space-y-2">
+                <div class="flex justify-between text-xs">
+                  <span class="text-slate-300 font-medium" id="lbl-sld-esavings">Annual Savings (E_sav)</span>
+                  <span class="text-emerald-400 font-mono font-bold" id="val-sld-esavings">60 tCO2e</span>
+                </div>
+                <input type="range" min="5" max="150" value="60" id="sld-esavings" oninput="updateCfaValues()" class="w-full accent-emerald-500 bg-slate-800 rounded-lg h-3 cursor-pointer touch-none">
+              </div>
+
+              <!-- Slider 3 -->
+              <div class="space-y-2">
+                <div class="flex justify-between text-xs">
+                  <span class="text-slate-300 font-medium" id="lbl-sld-emaint">Annual Upkeep (E_maint)</span>
+                  <span class="text-red-400 font-mono font-bold" id="val-sld-emaint">15 tCO2e</span>
+                </div>
+                <input type="range" min="1" max="60" value="15" id="sld-emaint" oninput="updateCfaValues()" class="w-full accent-red-400 bg-slate-800 rounded-lg h-3 cursor-pointer touch-none">
+              </div>
+            </div>
+
+            <!-- Timeline visualization panel -->
+            <div class="p-4 lg:p-5 rounded-xl bg-slate-900/60 border border-slate-800 space-y-4 lg:col-span-2 flex flex-col justify-between">
+              <div>
+                <h4 class="text-xs font-bold text-slate-300 uppercase tracking-widest mb-1.5 border-b border-slate-800 pb-2" id="cfa-timeline-title">Amortization Progression Map</h4>
+                
+                <div id="cfa-timeline-container" class="space-y-3 mt-3">
+                  <!-- Dynamically generated year bars -->
+                </div>
+              </div>
+
+              <div class="pt-4 border-t border-slate-800 text-[11px] text-slate-400 leading-normal flex items-center gap-2.5 mt-4">
+                <svg class="w-5 h-5 text-emerald-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                <strong id="cfa-insight-text">Think of initial footprint as ecological debt to pay down quickly.</strong>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- TAB 4: BREAKOUT CHALLENGES -->
+        <section id="tab-breakout" class="workspace-tab space-y-6 hidden">
+          <div class="mb-2">
+            <h3 class="text-base lg:text-lg font-bold text-white" id="breakout-title">Active Learning breakout debates</h3>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- Box 1 -->
+            <div class="p-4 lg:p-5 rounded-xl bg-slate-900/60 border border-slate-800 flex flex-col justify-between hover:border-slate-700 transition-colors">
+              <div>
+                <span class="text-[10px] bg-emerald-500/10 text-emerald-400 px-2.5 py-1 rounded font-mono font-bold block w-max mb-3 uppercase tracking-wider" id="ch-1-lbl">CHALLENGE 01</span>
+                <h4 class="text-xs lg:text-sm font-bold text-slate-200 uppercase tracking-wide" id="ch-1-title">SROI Tradeoffs</h4>
+                <p class="text-[11px] lg:text-xs text-slate-300 leading-relaxed mt-2.5" id="ch-1-desc">Challenge description content.</p>
+              </div>
+            </div>
+            <!-- Box 2 -->
+            <div class="p-4 lg:p-5 rounded-xl bg-slate-900/60 border border-slate-800 flex flex-col justify-between hover:border-slate-700 transition-colors">
+              <div>
+                <span class="text-[10px] bg-blue-500/10 text-tech-400 px-2.5 py-1 rounded font-mono font-bold block w-max mb-3 uppercase tracking-wider" id="ch-2-lbl">CHALLENGE 02</span>
+                <h4 class="text-xs lg:text-sm font-bold text-slate-200 uppercase tracking-wide" id="ch-2-title">Carbon Traps</h4>
+                <p class="text-[11px] lg:text-xs text-slate-300 leading-relaxed mt-2.5" id="ch-2-desc">Challenge description content.</p>
+              </div>
+            </div>
+            <!-- Box 3 -->
+            <div class="p-4 lg:p-5 rounded-xl bg-slate-900/60 border border-slate-800 flex flex-col justify-between hover:border-slate-700 transition-colors">
+              <div>
+                <span class="text-[10px] bg-purple-500/10 text-purple-400 px-2.5 py-1 rounded font-mono font-bold block w-max mb-3 uppercase tracking-wider" id="ch-3-lbl">CHALLENGE 03</span>
+                <h4 class="text-xs lg:text-sm font-bold text-slate-200 uppercase tracking-wide" id="ch-3-title">Boardroom Recusals</h4>
+                <p class="text-[11px] lg:text-xs text-slate-300 leading-relaxed mt-2.5" id="ch-3-desc">Challenge description content.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Protocol checklist cheat sheet -->
+          <div class="p-4 lg:p-6 rounded-xl bg-slate-950 border border-slate-850">
+            <div class="flex items-center gap-2 mb-4 border-b border-slate-900 pb-3">
+              <svg class="w-5 h-5 text-brand-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+              <h4 class="text-xs font-mono font-bold text-brand-400 uppercase tracking-widest" id="cheat-head">COI Compliance cheat sheet</h4>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-xs" id="cheat-grid">
+              <!-- Dynamically rendered checklist blocks -->
+            </div>
+          </div>
+        </section>
+
+      </div>
+
+      <!-- Print Layout Footer -->
+      <div class="hidden print:block border-t border-slate-300 pt-6 mt-8 text-center text-[10px] text-black font-sans">
+        <p class="font-bold" id="pr-foot-l1">OBISL Campus • Certificate in Business Management Skills</p>
+        <p class="italic" id="pr-foot-l2">Module 3: Business Ethics & Professionalism Practicum Manual</p>
+        <p class="mt-1 font-mono" id="pr-foot-l3">Date Printed: 2026-06-24</p>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- COMPREHENSIVE TRANSLATION ENGINE & RUNTIME STATE JS -->
+  <script>
+    // State Registry
+    const state = {
+      lang: 'en',
+      activeTab: 'case',
+      showGlossary: false,
+      mobileMenuOpen: false,
+      
+      // SROI Parameters
+      vFin: 100,
+      vSoc: 75,
+      vEnv: 45,
+      iTot: 120,
+
+      // CFA Parameters
+      eEmbed: 300,
+      eSavings: 60,
+      eMaint: 15,
+
+      // Action tracking
+      selectedChipAction: null, // 'ethical' or 'unethical'
+      selectedGridAction: null  // 'solar' or 'coal'
+    };
+
+    // Dictionary Directory matching React components perfectly
+    const translations = {
+      en: {
+        brandTitle: "OBISL CAMPUS",
+        brandSubtitle: "PRACTICUM PORTAL",
+        moduleTitle: "M3: Business Ethics & Professionalism",
+        moduleLabel: "Module 3: Business Ethics & Professionalism",
+        tab1_label: "1. Case Connections",
+        tab1_sin: "Step 1: Core Decisions",
+        tab2_label: "2. SROI Impact Lab",
+        tab2_sin: "Social ROI Calculator",
+        tab3_label: "3. CFA Carbon Lab",
+        tab3_sin: "Carbon Amortization",
+        tab4_label: "4. Breakout Challenges",
+        tab4_sin: "Active Learning Debates",
+        glossaryHeader: "Metric Explanations",
+        glossaryTeaser: "Confused about terms like tCO2e or SROI?",
+        glossaryBtnShow: "SHOW EXPLAINERS",
+        glossaryBtnHide: "HIDE EXPLAINERS",
+        exportBtn: "EXPORT TO PDF / PRINT",
+        versionInfo: "CBMS Practicum Engine v2.3",
+        hudSession: "CBMS STUDY SESSION",
+        hudLiveSystems: "LIVE SYSTEMS ALIGNMENT",
+        hudSroi: "LIVE SROI",
+        hudSroiDesc: "Sustainable ROI",
+        hudCfa: "CFA PAYBACK",
+        hudCfaDesc: "Carbon Payback",
+        yrs: "Yrs",
+        never: "Never",
+        glossaryTitle: "Student-Friendly Metric Explanations",
+        glossaryClose: "✕ Close",
+        tco2e_title: "tCO2e",
+        tco2e_fullname: "Tonnes of Carbon Dioxide Equivalent",
+        tco2e_desc: "The global standard metric used to measure and compare total Greenhouse Gas (GHG) emissions.",
+        tco2e_analogy: "💡 Analogy: 1 tCO2e is like burning 425 liters of gasoline.",
+        sroi_title: "Sustainable SROI",
+        sroi_fullname: "Social Return on Investment",
+        sroi_desc: "Traditional ROI only measures dollars. SROI translates social trust and clean-air contributions into dollar terms, adding them to direct revenue.",
+        sroi_analogy: "💡 Threshold: An SROI score > 1.0x means society gets back more than you spent.",
+        cfa_title: "CFA Payback",
+        cfa_fullname: "Carbon Footprint Amortization",
+        cfa_desc: "Manufacturing green technology (like solar panels) creates carbon footprint. CFA calculates how many years it takes for annual savings to pay back this initial carbon debt.",
+        cfa_analogy: "💡 Goal: A smaller payback period is always better!",
+        caseBannerTitle: "Step 1: Link Ethical Decisions to Real Numbers",
+        caseBannerDesc: "Choose an action in each of the short case studies below. Your selections will instantly load real-world metrics into the SROI and CFA laboratories on the next tabs!",
+        caseATitle: "CASE A: THE AEGIS-9 CRISIS",
+        caseACompany: "NexusCore Technologies",
+        caseADesc: "Dr. Elena Vance discovers Aegis-9 chips suffer severe thermal leaks under heavy processing loads. Shipping them immediately preserves immediate $150M revenue but puts lives at risk.",
+        pathA1Title: "Path A1: Ethical Disclosure & Full Recycle",
+        pathA1Tag: "TBL Standard",
+        pathA1Desc: "Sacrifice short-term revenue to maintain long-term consumer trust. Recycle defective metal stock.",
+        pathA2Title: "Path A2: Conceal & Deploy Silent Firmware Patch",
+        pathA2Tag: "Profit Focus",
+        pathA2Desc: "Ship anyway. Quietly limit processor performance by 15% to avoid explosions, deceiving customers.",
+        caseALinkedSroi: "Values linked to SROI Lab:",
+        caseACalculatedSroi: "Calculated Decision SROI:",
+        caseAStrongBalance: "SROI (Strong Balance!)",
+        caseAVulnerable: "SROI (Unbalanced/Ethically Vulnerable)",
+        caseBTitle: "CASE B: ECO-EFFICIENCY UPGRADE",
+        caseBCompany: "Production Facility Upgrades",
+        caseBDesc: "The main factory energy grid must be upgraded to reduce emissions. Selecting high-quality clean technology cuts long-term footprint but demands high initial embedded materials setup.",
+        pathB1Title: "Path B1: Renewable Solar Smart-Grid Upgrade",
+        pathB1Tag: "High Offset",
+        pathB1Desc: "Excellent carbon offsets. Moderate initial manufacturing footprint, outstanding annual carbon saving rate.",
+        pathB2Title: "Path B2: Standard Gas-Powered Upgrade",
+        pathB2Tag: "Fossil Fuel",
+        pathB2Desc: "Heavy raw infrastructure footprint. High annual upkeep emissions with poor emission offsetting efficiency.",
+        caseBLinkedCfa: "Values linked to CFA Lab:",
+        caseBCalculatedPayback: "Calculated Payback Period:",
+        caseBHighlyEfficient: "Years (Highly Efficient)",
+        caseBCarbonTrap: "Never Pays Back (Fossil Fuel Carbon Trap!)",
+        caseNextPrompt: "Ready to analyze the SROI and CFA mathematics?",
+        caseNextBtn: "Proceed to SROI Lab",
+        sroiTitle: "Social Return on Investment (SROI)",
+        sroiSubtitle: "Quantifying Corporate Morality via Triple Bottom Line",
+        sroiDesc: "Business ethics must go beyond statements. Standard ROI only tracks financial gain ($V_{financial}$). Sustainable ROI (SROI) monetizes and adds Social ($V_{social}$) and Ecological ($V_{environmental}$) values.",
+        sroiLiveFormula: "LIVE SROI FORMULA FRACTION",
+        sroiRatio: "SROI RATIO",
+        sroiAdjustValues: "Adjust Values (V_financial, V_social, V_environmental, I_total)",
+        sroiSliderFinancial: "Financial Value Gain (V_financial)",
+        sroiSliderSocial: "Preserved Social Trust (V_social)",
+        sroiSliderEnvironmental: "Ecological Stewardship (V_environmental)",
+        sroiSliderInvestment: "Total Resource Investment (I_total)",
+        sroiAuditHeader: "Mathematical Audit Analysis",
+        sroiAuditExcTitle: "🌟 EXCELLENT TRIPLE BOTTOM LINE COMPLIANCE",
+        sroiAuditExcDesc: "This project is a sustainable success. The social trust and ecological restoration benefits heavily exceed the initial capital required. Ideal for ESG certification.",
+        sroiAuditModTitle: "⚖️ MODERATE TRIPLE BOTTOM LINE ALIGNMENT",
+        sroiAuditModDesc: "The project generates value but lacks strong environmental or social buffers. Tweak the sliders to increase social trust or ecology parameters to achieve maximum ESG balance.",
+        sroiAuditFailTitle: "⚠️ CRITICAL VALUES FAILURE (UNSUSTAINABLE)",
+        sroiAuditFailDesc: "Warning! Short-term financial prioritisation has compromised corporate reputation and environmental safety. SROI under 1.0x indicates terminal stakeholder value depletion.",
+        sroiInsight: "Practical Session Insight: SROI illustrates that true corporate growth is a three-dimensional equilibrium of People, Planet, and Profit.",
+        cfaTitle: "Carbon Footprint Amortization (CFA)",
+        cfaSubtitle: "Tracking Ecological Payback Periods",
+        cfaDesc: "Every green technology upgrade requires manufacturing raw resources, which releases carbon up front ($E_{embedded}$). Carbon Footprint Amortization calculates the number of years required for annual emissions savings to pay back this initial debt.",
+        cfaLiveFormula: "CFA MATHEMATICAL EQUATION",
+        cfaPaybackTimeframe: "PAYBACK TIMEFRAME",
+        cfaAdjustVariables: "Tweak Variables (Unit: tCO2e)",
+        cfaSliderEmbedded: "Embedded Asset Carbon (E_embedded)",
+        cfaSliderSavings: "Annual Carbon Savings (E_savings)",
+        cfaSliderMaint: "Annual Maintenance Carbon (E_maintenance)",
+        cfaTimelineHeader: "Projected Carbon Offset Timeline",
+        cfaTrapTitle: "Critical Carbon Trap!",
+        cfaTrapDesc: "Annual maintenance emissions exceed annual savings. This asset will never pay back its carbon debt. Amortization is impossible.",
+        cfaYear: "Year",
+        cfaLeft: "left",
+        cfaAmortized: "Amortized! ✓",
+        cfaInsight: "Student Tip: Think of tCO2e like financial debt. The faster we repay it with annual savings, the better for our ecological balance sheet.",
+        breakoutTitle: "Dynamic Breakout Challenges: 30-Minute Sessions",
+        challenge01: "CHALLENGE 01",
+        challenge01Title: "The SROI Debate (TBL Trade-offs)",
+        challenge01Desc: "If a project has an excellent Financial ROI but a terrible SROI (less than 0.5x), should a corporate manager recuse or cancel? How do we balance shareholders against consumer health?",
+        challenge02: "CHALLENGE 02",
+        challenge02Title: "Decoupling Carbon Traps",
+        challenge02Desc: "Explain how high annual maintenance emissions can lead to a \"Carbon Trap\" (un-amortizable status) in green technologies. What design changes reduce initial embedded footprint?",
+        challenge03: "CHALLENGE 03",
+        challenge03Title: "The Conflict of Interest Protocol",
+        challenge03Desc: "Analyze the 4-step COI protocol from the notes: 1. Identification, 2. Disclosure, 3. Recusal, and 4. Independent Audit. How does this prevent public relations disasters?",
+        cheatsheetTitle: "Fiduciary Virtues Cheat Sheet (OBISL Standard)",
+        cheat1Title: "1. Identify",
+        cheat1Desc: "Recognise situations where personal interests conflict with corporate duty.",
+        cheat2Title: "2. Disclose",
+        cheat2Desc: "Formally notify compliance or boardroom members about family or personal ties.",
+        cheat3Title: "3. Recuse",
+        cheat3Desc: "Remove yourself completely from final evaluation or decision panels.",
+        cheat4Title: "4. Audit",
+        cheat4Desc: "Allow neutral independent committees to review procurement process.",
+        footerLine1: "OBISL Campus • Certificate in Business Management Skills (CBMS)",
+        footerLine2: "Module 3: Business Ethics & Professionalism Practicum Manual",
+        footerLine3: "Date Printed",
+        
+        // Premium touch links description updates
+        caseALinkedSroiDescEthical: "Financial: $40M | Social: $120M | Environmental: $90M | Investment: $100M",
+        caseALinkedSroiDescUnethical: "Financial: $150M | Social: $10M | Environmental: $5M | Investment: $110M",
+        caseBLinkedCfaDescSolar: "Embedded: 220 tCO2e | Savings: 75 tCO2e | Upkeep: 10 tCO2e",
+        caseBLinkedCfaDescCoal: "Embedded: 450 tCO2e | Savings: 20 tCO2e | Upkeep: 40 tCO2e"
+      },
+      si: {
+        brandTitle: "OBISL කැම්පස්",
+        brandSubtitle: "ප්‍රායෝගික පුහුණු ද්වාරය",
+        moduleTitle: "M3: ව්‍යාපාරික ආචාර ධර්ම සහ වෘත්තීයවේදය",
+        moduleLabel: "මොඩියුලය 3: ව්‍යාපාරික ආචාර ධර්ම සහ වෘත්තීයවේදය",
+        tab1_label: "1. සිද්ධි සම්බන්ධතා",
+        tab1_sin: "පියවර 1: මූලික තීරණ",
+        tab2_label: "2. SROI බලපෑම් විද්‍යාගාරය",
+        tab2_sin: "සමාජ ආයෝජන ප්‍රතිලාභය",
+        tab3_label: "3. CFA කාබන් විද්‍යාගාරය",
+        tab3_sin: "කාබන් පියවීම් විශ්ලේෂණය",
+        tab4_label: "4. කණ්ඩායම් සාකච්ඡා අභියෝග",
+        tab4_sin: "ක්‍රියාකාරී ඉගෙනුම් විවාද",
+        glossaryHeader: "මිනුම් පිළිබඳ පැහැදිලි කිරීම්",
+        glossaryTeaser: "tCO2e හෝ SROI වැනි සංකල්ප පිළිබඳව ගැටලු පවතීද?",
+        glossaryBtnShow: "පැහැදිලි කිරීම් පෙන්වන්න",
+        glossaryBtnHide: "පැහැදිලි කිරීම් සඟවන්න",
+        exportBtn: "PDF ලෙස අපනයනය / මුද්‍රණය",
+        versionInfo: "CBMS ප්‍රායෝගික එන්ජිම v2.3",
+        hudSession: "CBMS අධ්‍යයන සැසිය",
+        hudLiveSystems: "සජීවී පද්ධති පෙළගැස්ම",
+        hudSroi: "සජීවී SROI අගය",
+        hudSroiDesc: "තිරසාර ROI",
+        hudCfa: "CFA පියවීම් කාලය",
+        hudCfaDesc: "කාබන් පියවීමේ කාලය",
+        yrs: "වසර",
+        never: "පියවිය නොහැක",
+        glossaryTitle: "ශිෂ්‍ය හිතකාමී මිනුම් පැහැදිලි කිරීම්",
+        glossaryClose: "✕ වසන්න",
+        tco2e_title: "tCO2e",
+        tco2e_fullname: "කාබන් ඩයොක්සයිඩ් සමාන මෙට්‍රික් ටොන්",
+        tco2e_desc: "හරිතාගාර වායු (GHG) විමෝචන ප්‍රමාණය මැනීම සහ සංසන්දනය කිරීම සඳහා භාවිතා කරන ගෝලීය සම්මත මිනුමයි.",
+        tco2e_analogy: "💡 උපමාව: 1 tCO2e යනු පෙට්‍රල් ලීටර් 425 ක් දහනය කිරීම වැනිය.",
+        sroi_title: "තිරසාර SROI",
+        sroi_fullname: "ආයෝජන මත සමාජීය ප්‍රතිලාභය",
+        sroi_desc: "සාම්ප්‍රදායික ROI මඟින් මනින්නේ මූල්‍යමය ලාභ පමණි. තිරසාර SROI මඟින් සමාජීය විශ්වාසය සහ පිරිසිදු වාතය සඳහා දායකත්වය මුදල්මය වශයෙන් පරිවර්තනය කර සෘජු ආදායමට එකතු කරයි.",
+        sroi_analogy: "💡 සීමාව: SROI අගය > 1.0x නම් ඉන් අදහස් වන්නේ ඔබ වැය කළ මුදලට වඩා වැඩි වටිනාකමක් සමාජයට නැවත ලැබී ඇති බවයි.",
+        cfa_title: "CFA පියවීම් කාලය",
+        cfa_fullname: "කාබන් පියසටහන් පියවීමේ කාලසීමාව",
+        cfa_desc: "හරිත තාක්ෂණික උපාංග (සූර්ය පැනල වැනි) නිෂ්පාදනයේදී මූලිකවම පරිසරයට කාබන් මුදා හැරේ ($E_{embedded}$). කාබන් පියසටහන් පියවීමේ කාලසීමාව මඟින් එම මූලික කාබන් ණය ප්‍රමාණය පියවා ගැනීමට වාර්ෂික කාබන් ඉතිරියට කොපමණ වසර ගණනක් ගතවේද යන්න ගණනය කරයි.",
+        cfa_analogy: "💡 ඉලක්කය: පියවීමේ කාලසීමාව අඩු වන තරමට එය සැමවිටම යහපත් වේ!",
+        caseBannerTitle: "පියවර 1: සදාචාරාත්මක තීරණ සැබෑ සංඛ්‍යා සමඟ සම්බන්ධ කිරීම",
+        caseBannerDesc: "පහත දැක්වෙන කෙටි සිද්ධි අධ්‍යයනවලින් සුදුසු ක්‍රියාමාර්ගය තෝරන්න. ඔබගේ තේරීම් මඟින් ඊළඟ ටැබ්වල ඇති SROI සහ CFA විද්‍යාගාර වෙත සැබෑ දත්ත ක්ෂණිකව ඇතුළත් කරනු ඇත!",
+        caseATitle: "සිද්ධි අධ්‍යයනය A: AEGIS-9 අර්බුදය",
+        caseACompany: "NexusCore තාක්ෂණික ආයතනය",
+        caseADesc: "Aegis-9 ක්ෂුද්‍ර චිප්ස් අධික ලෙස ක්‍රියාත්මක වීමේදී තාප කාන්දුවීම් සිදුවන බව ආචාර්ය එලේනා වැන්ස් සොයා ගනී. ඒවා වහාම වෙළඳපොළට යැවීමෙන් ඩොලර් මිලියන 150 ක ක්ෂණික ආදායමක් ලැබුණද මිනිස් ජීවිත අවදානමකට ලක් වේ.",
+        pathA1Title: "මාවත A1: සදාචාරාත්මක හෙළිදරව්ව සහ සම්පූර්ණ ප්‍රතිචක්‍රීකරණය",
+        pathA1Tag: "තිරසාර සම්මතය",
+        pathA1Desc: "දිගුකාලීන පාරිභෝගික විශ්වාසය රැක ගැනීම සඳහා කෙටිකාලීන ආදායම කැප කරන්න. දෝෂ සහිත ලෝහ තොග ප්‍රතිචක්‍රීකරණය කරන්න.",
+        pathA2Title: "මාවත A2: වසන් කිරීම සහ රහසිගත මෘදුකාංග යාවත්කාලීන මඟින් දෝෂය පාලනය කිරීම",
+        pathA2Tag: "ලාභය මුල් කරගත්",
+        pathA2Desc: "කෙසේ හෝ නිෂ්පාදන වෙළඳපොළට යවන්න. පිපිරීම් වළක්වා ගැනීම සඳහා ප්‍රොසෙසරයේ කාර්ය සාධනය 15% කින් රහසිගතව සීමා කරන්න, පාරිභෝගිකයා නොමඟ යවන්න.",
+        caseALinkedSroi: "SROI විද්‍යාගාරයට සම්බන්ධ අගයන්:",
+        caseACalculatedSroi: "තීරණයේ ගණනය කළ SROI අගය:",
+        caseAStrongBalance: "SROI (ශක්තිමත් තිරසාර සමතුලිතතාවයක්!)",
+        caseAVulnerable: "SROI (අසමතුලිත/සදාචාරාත්මකව දුර්වලයි)",
+        caseBTitle: "සිද්ධි අධ්‍යයනය B: පරිසර හිතකාමී ජාල පද්ධති යාවත්කාලීන කිරීම",
+        caseBCompany: "නිෂ්පාදන පද්ධති යාවත්කාලීනයන්",
+        caseBDesc: "කාබන් විමෝචනය අවම කිරීම සඳහා ප්‍රධාන කර්මාන්තශාලාවේ බලශක්ති පද්ධතිය යාවත්කාලීන කළ යුතුය. උසස් තත්ත්වයේ හරිත තාක්ෂණය තෝරා ගැනීමෙන් දිගුකාලීන කාබන් පියසටහන අඩු වන නමුත් මූලික නිෂ්පාදන ද්‍රව්‍ය සඳහා විශාල කාබන් ප්‍රමාණයක් වැය වේ.",
+        pathB1Title: "මාවත B1: පුනර්ජනනීය සූර්ය බලශක්ති ස්මාර්ට් ජාලය",
+        pathB1Tag: "උපරිම ඉතිරිය",
+        pathB1Desc: "විශිෂ්ට කාබන් පියවීම්. මධ්‍යස්ථ මූලික නිෂ්පාදන කාබන් පියසටහනක් සහ සුවිශේෂී වාර්ෂික කාබන් ඉතිරි කිරීමේ අනුපාතයක් ඇත.",
+        pathB2Title: "මාවත B2: සම්මත ගෑස්/අඟුරු බලශක්ති පද්ධතිය",
+        pathB2Tag: "පොසිල ඉන්ධන",
+        pathB2Desc: "අධික මූලික යටිතල පහසුකම් කාබන් පියසටහනක් ඇත. වාර්ෂික නඩත්තු විමෝචනයන් ඉහළ මට්ටමක පවතින අතර කාබන් පියවීමේ කාර්යක්ෂමතාව ඉතා අඩුය.",
+        caseBLinkedCfa: "CFA විද්‍යාගාරයට සම්බන්ධ අගයන්:",
+        caseBCalculatedPayback: "ගණනය කළ කාබන් පියවීමේ කාලය:",
+        caseBHighlyEfficient: "වසර (ඉතා කාර්යක්ෂමයි)",
+        caseBCarbonTrap: "කිසිදා පියවිය නොහැක (පොසිල ඉන්ධන කාබන් උගුලකි!)",
+        caseNextPrompt: "SROI සහ CFA ගණනය කිරීම් විශ්ලේෂණය කිරීමට සූදානම්ද?",
+        caseNextBtn: "SROI විද්‍යාගාරය වෙත යන්න",
+        sroiTitle: "ආයෝජන මත සමාජීය ප්‍රතිලාභය (SROI)",
+        sroiSubtitle: "තිරසාර සාධක ත්‍රිත්වය (TBL) මඟින් ආයතනික සදාචාරය මැනීම",
+        sroiDesc: "ව්‍යාපාරික ආචාර ධර්ම හුදු ප්‍රකාශවලට පමණක් සීමා නොවිය යුතුය. සාම්ප්‍රදායික ROI මනින්නේ මූල්‍ය ලාභය ($V_{financial}$) පමණි. තිරසාර SROI මඟින් සමාජීය ($V_{social}$) සහ පාරිසරික ($V_{environmental}$) වටිනාකම් මුදල්මය වශයෙන් එකතු කරයි.",
+        sroiLiveFormula: "සජීවී SROI සූත්‍ර සැකැස්ම",
+        sroiRatio: "SROI අනුපාතය",
+        sroiAdjustValues: "අගයන් වෙනස් කරන්න (V_financial, V_social, V_environmental, I_total)",
+        sroiSliderFinancial: "මූල්‍යමය ප්‍රතිලාභය (V_financial)",
+        sroiSliderSocial: "සමාජීය විශ්වාසය සුරැකීම (V_social)",
+        sroiSliderEnvironmental: "පාරිසරික වගකීම (V_environmental)",
+        sroiSliderInvestment: "මුළු සම්පත් ආයෝජනය (I_total)",
+        sroiAuditHeader: "ගණිතමය විගණන විශ්ලේෂණය",
+        sroiAuditExcTitle: "🌟 විශිෂ්ට තිරසාර සමතුලිතතාවයක් (TBL COMPLIANCE)",
+        sroiAuditExcDesc: "මෙම ව්‍යාපෘතිය තිරසාර ලෙස සාර්ථකයි. සමාජීය විශ්වාසය සහ පාරිසරික ප්‍රතිලාභ, වැය කළ මුළු ප්‍රාග්ධනයට වඩා බෙහෙවින් ඉහළය. ESG සහතිකකරණය සඳහා ඉතා සුදුසුය.",
+        sroiAuditModTitle: "⚖️ මධ්‍යස්ථ තිරසාර සමතුලිතතාවයක් (TBL ALIGNMENT)",
+        sroiAuditModDesc: "ව්‍යාපෘතිය යම් වටිනාකමක් ජනනය කරන නමුත් ශක්තිමත් පාරිසරික හෝ සමාජීය පදනමක් නොමැත. උපරිම ESG සමතුලිතතාවයක් ලබා ගැනීම සඳහා සමාජීය විශ්වාසය හෝ පාරිසරික පරාමිතීන් වැඩි කිරීමට උත්සාහ කරන්න.",
+        sroiAuditFailTitle: "⚠️ අවදානම් සහගත තත්ත්වයක් (තිරසාර නොවේ)",
+        sroiAuditFailDesc: "අනතුරු ඇඟවීමයි! කෙටි කාලීන මූල්‍ය ප්‍රතිලාභය පමණක් සලකා කටයුතු කිරීම නිසා සමාජීය විශ්වාසය සහ පාරිසරික සුරක්ෂිතතාවය බිඳ වැටී ඇත. SROI අගය 1.0x ට වඩා අඩු වීම යනු ව්‍යාපෘතියේ අසාර්ථකත්වයයි.",
+        sroiInsight: "ප්‍රායෝගික සැසියේ අවබෝධය: සැබෑ ආයතනික වර්ධනය යනු මිනිසුන් (People), පරිසරය (Planet) සහ මූල්‍ය ලාභය (Profit) යන ත්‍රිත්වයේ සමතුලිතතාවයයි.",
+        cfaTitle: "කාබන් පියසටහන් පියවීමේ කාලසීමාව (CFA)",
+        cfaSubtitle: "පාරිසරික වශයෙන් කාබන් පියවීමේ කාලය ගණනය කිරීම",
+        cfaDesc: "ඕනෑම හරිත තාක්ෂණික උපාංගයක් නිෂ්පාදනය කිරීමේදී මූලිකවම පරිසරයට කාබන් මුදා හැරේ ($E_{embedded}$). කාබන් පියසටහන් පියවීමේ කාලසීමාව මඟින් එම මූලික කාබන් ණය ප්‍රමාණය පියවා ගැනීමට වාර්ෂික කාබන් ඉතිරියට කොපමණ වසර ගණනක් ගතවේද යන්න ගණනය කරයි.",
+        cfaLiveFormula: "CFA ගණිතමය සමීකරණය",
+        cfaPaybackTimeframe: "කාබන් පියවීමේ කාලය",
+        cfaAdjustVariables: "පරාමිතීන් වෙනස් කරන්න (tCO2e ඒකකයෙන්)",
+        cfaSliderEmbedded: "මූලික උපාංග කාබන් පියසටහන (E_embedded)",
+        cfaSliderSavings: "වාර්ෂික කාබන් ඉතිරිය (E_savings)",
+        cfaSliderMaint: "වාර්ෂික නඩත්තු කාබන් පිරිවැය (E_maintenance)",
+        cfaTimelineHeader: "කාබන් පියවීමේ වාර්ෂික ප්‍රගති කාලරාමුව",
+        cfaTrapTitle: "අවදානම් සහගත කාබන් උගුලක්!",
+        cfaTrapDesc: "වාර්ෂික නඩත්තු විමෝචනය, වාර්ෂික කාබන් ඉතිරියට වඩා ඉහළය. මෙම ව්‍යාපෘතියට කිසිදා එහි මූලික කාබන් ණය ගෙවා නිම කළ නොහැක. කාබන් පියවීම කළ නොහැක්කකි.",
+        cfaYear: "වසර",
+        cfaLeft: "ඉතිරිව ඇත",
+        cfaAmortized: "සම්පූර්ණයෙන්ම පියවා ඇත! ✓",
+        cfaInsight: "ශිෂ්‍ය උපදෙස: tCO2e අගය මූල්‍යමය ණයක් ලෙස සිතන්න. වාර්ෂික ඉතිරිකිරීම් මඟින් එය වේගයෙන් පියවන තරමට පාරිසරික සමතුලිතතාවය යහපත් වේ.",
+        breakoutTitle: "කණ්ඩායම් සාකච්ඡා අභියෝග: විනාඩි 30 ක සැසි",
+        challenge01: "අභියෝගය 01",
+        challenge01Title: "SROI විවාදය (TBL සමතුලිතතාවය)",
+        challenge01Desc: "ව්‍යාපෘතියකට විශිෂ්ට මූල්‍ය ප්‍රතිලාභයක් තිබුණද එහි SROI අගය ඉතා දුර්වල නම් (0.5x ට වඩා අඩු නම්), ආයතනික කළමනාකරුවෙකු එම ව්‍යාපෘතිය අවලංගු කළ යුතුද? පාරිභෝගික සෞඛ්‍යය සහ කොටස් හිමියන්ගේ ලාභය සමතුලිත කරන්නේ කෙසේද?",
+        challenge02: "අභියෝගය 02",
+        challenge02Title: "කාබන් උගුල්වලින් මිදීම",
+        challenge02Desc: "හරිත තාක්ෂණයේදී ඉහළ වාර්ෂික නඩත්තු විමෝචනයන් නිසා 'කාබන් උගුලක්' (කිසිදා පියවිය නොහැකි තත්ත්වයක්) ඇති විය හැක්කේ කෙසේදැයි පැහැදිලි කරන්න. මූලික නිෂ්පාදන කාබන් පියසටහන අඩු කිරීමට කළ හැකි සැලසුම් සහගත වෙනස්කම් මොනවාද?",
+        challenge03: "අභියෝගය 03",
+        challenge03Title: "ලාභ හෝ පෞද්ගලික ගැටුම් (COI) ප්‍රොටෝකෝලය",
+        challenge03Desc: "සම්මත ලාභ ගැටුම් ප්‍රොටෝකෝලයේ පියවර 4 විශ්ලේෂණය කරන්න: 1. හඳුනාගැනීම, 2. හෙළිදරව් කිරීම, 3. බැහැර වීම, සහ 4. ස්වාධීන විගණනය. මෙය ආයතනයේ කීර්ති නාමය රැක ගැනීමට දායක වන්නේ කෙසේද?",
+        cheatsheetTitle: "භාරකාර වගකීම් සහ ආචාර ධර්ම (OBISL සම්මතය)",
+        cheat1Title: "1. හඳුනාගැනීම (Identify)",
+        cheat1Desc: "පෞද්ගලික උද්‍යෝගයන් සහ ආයතනික වගකීම් අතර ගැටුමක් ඇති වන අවස්ථා නිවැරදිව හඳුනාගන්න.",
+        cheat2Title: "2. හෙළිදරව් කිරීම (Disclose)",
+        cheat2Desc: "පවුලේ හෝ පෞද්ගලික සබඳතා පිළිබඳව විධායක මණ්ඩලය හෝ අදාළ නිලධාරීන් විධිමත් ලෙස දැනුවත් කරන්න.",
+        cheat3Title: "3. බැහැර වීම (Recuse)",
+        cheat3Desc: "තීරණ ගැනීමේ හෝ ඇගයීම් කමිටුවලින් ඔබ සම්පූර්ණයෙන්ම ඉවත් වීමට කටයුතු කරන්න.",
+        cheat4Title: "4. විගණනය (Audit)",
+        cheat4Desc: "මිලදී ගැනීමේ හෝ තේරීමේ ක්‍රියාවලිය සමාලෝචනය කිරීමට ස්වාධීන අපක්ෂපාතී කමිටුවකට ඉඩ දෙන්න.",
+        footerLine1: "OBISL කැම්පස් • ව්‍යාපාර කළමනාකරණ කුසලතා සහතික පත්‍ර පාඨමාලාව (CBMS)",
+        footerLine2: "මොඩියුලය 3: ව්‍යාපාරික ආචාර ධර්ම සහ වෘත්තීයවේදය ප්‍රායෝගික අත්පොත",
+        footerLine3: "මුද්‍රිත දිනය",
+        
+        // Premium translation toggles
+        caseALinkedSroiDescEthical: "මූල්‍යය: $40M | සමාජයීය: $120M | පාරිසරික: $90M | ආයෝජනය: $100M",
+        caseALinkedSroiDescUnethical: "මූල්‍යය: $150M | සමාජයීය: $10M | පාරිසරික: $5M | ආයෝජනය: $110M",
+        caseBLinkedCfaDescSolar: "මූලික කාබන්: 220 tCO2e | ඉතිරිය: 75 tCO2e | නඩත්තුව: 10 tCO2e",
+        caseBLinkedCfaDescCoal: "මූලික කාබන්: 450 tCO2e | ඉතිරිය: 20 tCO2e | නඩත්තුව: 40 tCO2e"
+      }
+    };
+
+    function t(key) {
+      return translations[state.lang][key] || key;
     }
 
-    const rootElement = document.getElementById('root');
-    const root = ReactDOM.createRoot(rootElement);
-    root.render(<App />);
+    // Language Toggle logic
+    function setLanguage(langCode) {
+      state.lang = langCode;
+      
+      // Update toggle buttons design state
+      const enDesktop = document.getElementById('desktop-lang-en');
+      const siDesktop = document.getElementById('desktop-lang-si');
+      const enDrawer = document.getElementById('drawer-lang-en');
+      const siDrawer = document.getElementById('drawer-lang-si');
+      const mobToggle = document.getElementById('mobile-lang-toggle');
+      
+      if (langCode === 'en') {
+        enDesktop.className = "flex-1 text-center py-2.5 text-xs font-bold rounded-lg transition-all duration-200 cursor-pointer bg-brand-500 text-slate-950 shadow-md scale-105";
+        siDesktop.className = "flex-1 text-center py-2.5 text-xs font-bold rounded-lg transition-all duration-200 font-sinhala cursor-pointer text-slate-400 hover:text-slate-200";
+        enDrawer.className = "flex-1 text-center py-2 text-xs font-bold rounded-lg transition-all bg-brand-500 text-slate-950";
+        siDrawer.className = "flex-1 text-center py-2 text-xs font-bold rounded-lg transition-all text-slate-400 bg-slate-900 hover:text-slate-200";
+        mobToggle.innerText = "සිංහල";
+        document.body.classList.remove('font-sinhala');
+      } else {
+        enDesktop.className = "flex-1 text-center py-2.5 text-xs font-bold rounded-lg transition-all duration-200 cursor-pointer text-slate-400 hover:text-slate-200";
+        siDesktop.className = "flex-1 text-center py-2.5 text-xs font-bold rounded-lg transition-all duration-200 font-sinhala cursor-pointer bg-brand-500 text-slate-950 shadow-md scale-105";
+        enDrawer.className = "flex-1 text-center py-2 text-xs font-bold rounded-lg transition-all text-slate-400 bg-slate-900 hover:text-slate-200";
+        siDrawer.className = "flex-1 text-center py-2 text-xs font-bold rounded-lg transition-all font-sinhala bg-brand-500 text-slate-950";
+        mobToggle.innerText = "EN";
+        document.body.classList.add('font-sinhala');
+      }
+
+      translateEntireDOM();
+      renderNavigation();
+      updateCalculations();
+    }
+
+    function toggleLanguage() {
+      setLanguage(state.lang === 'en' ? 'si' : 'en');
+    }
+
+    function translateEntireDOM() {
+      // Sidebar texts
+      document.getElementById('mobile-brand-title').innerText = t('brandTitle');
+      document.getElementById('mobile-brand-subtitle').innerText = t('brandSubtitle');
+      document.getElementById('drawer-brand-title').innerText = t('brandTitle');
+      document.getElementById('drawer-brand-subtitle').innerText = t('brandSubtitle');
+      document.getElementById('desktop-brand-title').innerText = t('brandTitle');
+      document.getElementById('desktop-brand-subtitle').innerText = t('brandSubtitle');
+      document.getElementById('desktop-module-title').innerText = t('moduleTitle');
+      document.getElementById('drawer-lang-toggle-lbl').innerText = state.lang === 'en' ? "LANGUAGE" : "භාෂාව";
+      
+      // Glossary Block
+      document.getElementById('glossary-header').innerText = t('glossaryHeader');
+      document.getElementById('glossary-teaser').innerText = t('glossaryTeaser');
+      document.getElementById('glossary-btn-lbl').innerText = state.showGlossary ? t('glossaryBtnHide') : t('glossaryBtnShow');
+      document.getElementById('glossary-main-lbl').innerText = t('glossaryTitle');
+      document.getElementById('glossary-close').innerText = t('glossaryClose');
+      document.getElementById('gl-t-name').innerText = t('tco2e_fullname');
+      document.getElementById('gl-t-desc').innerText = t('tco2e_desc');
+      document.getElementById('gl-t-analogy').innerText = t('tco2e_analogy');
+      document.getElementById('gl-s-name').innerText = t('sroi_fullname');
+      document.getElementById('gl-s-desc').innerText = t('sroi_desc');
+      document.getElementById('gl-s-analogy').innerText = t('sroi_analogy');
+      document.getElementById('gl-c-name').innerText = t('cfa_fullname');
+      document.getElementById('gl-c-desc').innerText = t('cfa_desc');
+      document.getElementById('gl-c-analogy').innerText = t('cfa_analogy');
+
+      // HUD
+      document.getElementById('hud-session-lbl').innerText = t('hudSession');
+      document.getElementById('hud-sys-lbl').innerText = t('hudLiveSystems');
+      document.getElementById('hud-module-lbl').innerText = t('moduleLabel');
+      document.getElementById('hud-sroi-title').innerText = t('hudSroi');
+      document.getElementById('hud-sroi-desc').innerText = t('hudSroiDesc');
+      document.getElementById('hud-cfa-title').innerText = t('hudCfa');
+      document.getElementById('hud-cfa-desc').innerText = t('hudCfaDesc');
+
+      // Case Studies Tab
+      document.getElementById('case-banner-title').innerText = t('caseBannerTitle');
+      document.getElementById('case-banner-desc').innerText = t('caseBannerDesc');
+      document.getElementById('case-a-lbl').innerText = t('caseATitle');
+      document.getElementById('case-a-comp').innerText = t('caseACompany');
+      document.getElementById('case-a-desc').innerText = t('caseADesc');
+      document.getElementById('path-a1-title').innerText = t('pathA1Title');
+      document.getElementById('path-a1-tag').innerText = t('pathA1Tag');
+      document.getElementById('path-a1-desc').innerText = t('pathA1Desc');
+      document.getElementById('path-a2-title').innerText = t('pathA2Title');
+      document.getElementById('path-a2-tag').innerText = t('pathA2Tag');
+      document.getElementById('path-a2-desc').innerText = t('pathA2Desc');
+      document.getElementById('case-a-lbl-linked').innerText = t('caseALinkedSroi');
+      document.getElementById('case-a-lbl-calc').innerText = t('caseACalculatedSroi');
+      
+      document.getElementById('case-b-lbl').innerText = t('caseBTitle');
+      document.getElementById('case-b-comp').innerText = t('caseBCompany');
+      document.getElementById('case-b-desc').innerText = t('caseBDesc');
+      document.getElementById('path-b1-title').innerText = t('pathB1Title');
+      document.getElementById('path-b1-tag').innerText = t('pathB1Tag');
+      document.getElementById('path-b1-desc').innerText = t('pathB1Desc');
+      document.getElementById('path-b2-title').innerText = t('pathB2Title');
+      document.getElementById('path-b2-tag').innerText = t('pathB2Tag');
+      document.getElementById('path-b2-desc').innerText = t('pathB2Desc');
+      document.getElementById('case-b-lbl-linked').innerText = t('caseBLinkedCfa');
+      document.getElementById('case-b-lbl-calc').innerText = t('caseBCalculatedPayback');
+      document.getElementById('case-prompt-text').innerText = t('caseNextPrompt');
+      document.getElementById('case-btn-next').innerText = t('caseNextBtn');
+
+      // SROI Tab
+      document.getElementById('sroi-panel-tag').innerText = t('sroi_fullname') + " (SROI)";
+      document.getElementById('sroi-panel-title').innerText = t('sroiSubtitle');
+      document.getElementById('sroi-panel-desc').innerText = t('sroiDesc');
+      document.getElementById('sroi-eq-lbl').innerText = t('sroiLiveFormula');
+      document.getElementById('card-sroi-lbl').innerText = t('sroiRatio');
+      document.getElementById('sroi-adjust-title').innerText = t('sroiAdjustValues');
+      document.getElementById('lbl-sld-vfin').innerText = t('sroiSliderFinancial');
+      document.getElementById('lbl-sld-vsoc').innerText = t('sroiSliderSocial');
+      document.getElementById('lbl-sld-venv').innerText = t('sroiSliderEnvironmental');
+      document.getElementById('lbl-sld-itot').innerText = t('sroiSliderInvestment');
+      document.getElementById('sroi-audit-lbl').innerText = t('sroiAuditHeader');
+      document.getElementById('sroi-insight-text').innerText = t('sroiInsight');
+
+      // CFA Tab
+      document.getElementById('cfa-panel-tag').innerText = t('cfa_fullname') + " (CFA)";
+      document.getElementById('cfa-panel-title').innerText = t('cfaSubtitle');
+      document.getElementById('cfa-panel-desc').innerText = t('cfaDesc');
+      document.getElementById('cfa-eq-lbl').innerText = t('cfaLiveFormula');
+      document.getElementById('card-cfa-lbl').innerText = t('cfaPaybackTimeframe');
+      document.getElementById('cfa-adjust-title').innerText = t('cfaAdjustVariables');
+      document.getElementById('lbl-sld-eembed').innerText = t('cfaSliderEmbedded');
+      document.getElementById('lbl-sld-esavings').innerText = t('cfaSliderSavings');
+      document.getElementById('lbl-sld-emaint').innerText = t('cfaSliderMaint');
+      document.getElementById('cfa-timeline-title').innerText = t('cfaTimelineHeader');
+      document.getElementById('cfa-insight-text').innerText = t('cfaInsight');
+
+      // Breakouts
+      document.getElementById('breakout-title').innerText = t('breakoutTitle');
+      document.getElementById('ch-1-lbl').innerText = t('challenge01');
+      document.getElementById('ch-1-title').innerText = t('challenge01Title');
+      document.getElementById('ch-1-desc').innerText = t('challenge01Desc');
+      document.getElementById('ch-2-lbl').innerText = t('challenge02');
+      document.getElementById('ch-2-title').innerText = t('challenge02Title');
+      document.getElementById('ch-2-desc').innerText = t('challenge02Desc');
+      document.getElementById('ch-3-lbl').innerText = t('challenge03');
+      document.getElementById('ch-3-title').innerText = t('challenge03Title');
+      document.getElementById('ch-3-desc').innerText = t('challenge03Desc');
+      document.getElementById('cheat-head').innerText = t('cheatsheetTitle');
+
+      // Print Button Texts
+      document.getElementById('desktop-btn-print').innerText = t('exportBtn');
+      document.getElementById('drawer-btn-print').innerText = t('exportBtn');
+      document.getElementById('desktop-ver').innerText = t('versionInfo');
+      document.getElementById('drawer-ver').innerText = t('versionInfo');
+      document.getElementById('pr-foot-l1').innerText = t('footerLine1');
+      document.getElementById('pr-foot-l2').innerText = t('footerLine2');
+      document.getElementById('pr-foot-l3').innerText = t('footerLine3') + ": 2026-06-24";
+      
+      // Re-trigger visual feedback details on selected cases
+      if(state.selectedChipAction) {
+        document.getElementById('case-a-linked-val').innerText = state.selectedChipAction === 'ethical' ? t('caseALinkedSroiDescEthical') : t('caseALinkedSroiDescUnethical');
+        document.getElementById('case-a-calc-out').innerText = state.selectedChipAction === 'ethical' ? `2.50x (${t('caseAStrongBalance')})` : `1.50x (${t('caseAVulnerable')})`;
+      }
+      if(state.selectedGridAction) {
+        document.getElementById('case-b-linked-val').innerText = state.selectedGridAction === 'solar' ? t('caseBLinkedCfaDescSolar') : t('caseBLinkedCfaDescCoal');
+        document.getElementById('case-b-calc-out').innerText = state.selectedGridAction === 'solar' ? `3.4 ${t('caseBHighlyEfficient')}` : t('caseBCarbonTrap');
+      }
+    }
+
+    // Populates Navigation menus for Mobile and Desktop
+    function renderNavigation() {
+      const tabs = [
+        { id: 'case', label: t('tab1_label'), sin: t('tab1_sin'), svgPath: "M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" },
+        { id: 'sroi', label: t('tab2_label'), sin: t('tab2_sin'), svgPath: "M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7h3.5m7.5 0l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M17 7l3 9m-3-9h-3.5M12 5v15m0 0h3m-3 0H9" },
+        { id: 'cfa', label: t('tab3_label'), sin: t('tab3_sin'), svgPath: "M20.354 15.354A9 9 0 018.646 3.646c.507.075.98.36 1.343.824a8.982 8.982 0 005.514 5.514c.463.363.748.836.824 1.343a9.02 9.02 0 014.027 4.027z" },
+        { id: 'breakout', label: t('tab4_label'), sin: t('tab4_sin'), svgPath: "M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" }
+      ];
+
+      const desktopNav = document.getElementById('desktop-nav-links');
+      const mobileNav = document.getElementById('mobile-nav-links');
+      
+      desktopNav.innerHTML = '';
+      mobileNav.innerHTML = '';
+
+      tabs.forEach(tab => {
+        const isActive = state.activeTab === tab.id;
+        
+        // Render Desktop button
+        const dBtn = document.createElement('button');
+        dBtn.type = 'button';
+        dBtn.onclick = () => setTab(tab.id);
+        dBtn.className = `w-full flex items-center gap-3.5 px-4 py-3.5 rounded-xl transition-all duration-150 text-left cursor-pointer relative z-40 ${
+          isActive 
+            ? 'bg-gradient-to-r from-brand-900/40 to-slate-900 border-l-4 border-brand-500 text-brand-400 font-semibold shadow-inner' 
+            : 'text-slate-400 hover:text-white hover:bg-slate-800/40'
+        }`;
+        dBtn.innerHTML = `
+          <span class="${isActive ? 'text-brand-400' : 'text-slate-500'}">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="${tab.svgPath}"/></svg>
+          </span>
+          <div>
+            <span class="text-xs block tracking-wide font-bold">${tab.label}</span>
+            <span class="text-[10px] text-slate-500 block leading-tight font-medium mt-0.5">${tab.sin}</span>
+          </div>
+        `;
+        desktopNav.appendChild(dBtn);
+
+        // Render Mobile button
+        const mBtn = document.createElement('button');
+        mBtn.type = 'button';
+        mBtn.onclick = () => { setTab(tab.id); toggleMobileMenu(); };
+        mBtn.className = `w-full flex items-center gap-3 px-3 py-3 rounded-lg transition-all text-left ${
+          isActive 
+            ? 'bg-slate-850 border-l-4 border-brand-500 text-brand-400 font-semibold' 
+            : 'text-slate-400 hover:text-white hover:bg-slate-800/40'
+        }`;
+        mBtn.innerHTML = `
+          <span class="${isActive ? 'text-brand-400' : 'text-slate-500'}">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="${tab.svgPath}"/></svg>
+          </span>
+          <div>
+            <span class="text-xs block tracking-wide font-bold">${tab.label}</span>
+            <span class="text-[9px] text-slate-500 block leading-tight mt-0.5">${tab.sin}</span>
+          </div>
+        `;
+        mobileNav.appendChild(mBtn);
+      });
+    }
+
+    // Tab controller toggler
+    function setTab(tabId) {
+      state.activeTab = tabId;
+      
+      // Hide all tabs
+      document.querySelectorAll('.workspace-tab').forEach(tab => tab.classList.add('hidden'));
+      // Show chosen tab
+      document.getElementById(`tab-${tabId}`).classList.remove('hidden');
+
+      renderNavigation();
+      updateCalculations();
+      
+      // Re-trigger MathJax dynamic rendering
+      if (window.MathJax && window.MathJax.typesetPromise) {
+        window.MathJax.typesetPromise().catch(err => console.log(err));
+      }
+    }
+
+    function toggleMobileMenu() {
+      const drawer = document.getElementById('mobile-drawer');
+      state.mobileMenuOpen = !state.mobileMenuOpen;
+      if (state.mobileMenuOpen) {
+        drawer.classList.remove('hidden');
+      } else {
+        drawer.classList.add('hidden');
+      }
+    }
+
+    function toggleGlossary() {
+      state.showGlossary = !state.showGlossary;
+      const gBox = document.getElementById('glossary-box');
+      const btnLabel = document.getElementById('glossary-btn-lbl');
+      if (state.showGlossary) {
+        gBox.classList.remove('hidden');
+        btnLabel.innerText = t('glossaryBtnHide');
+      } else {
+        gBox.classList.add('hidden');
+        btnLabel.innerText = t('glossaryBtnShow');
+      }
+    }
+
+    // CASE STUDY A: Decision actions
+    function selectPathA(choice) {
+      state.selectedChipAction = choice;
+      
+      // Update UI button designs
+      const btn1 = document.getElementById('btn-path-a1');
+      const btn2 = document.getElementById('btn-path-a2');
+      if (choice === 'ethical') {
+        btn1.className = "w-full p-4 rounded-xl text-left border transition-all duration-155 cursor-pointer bg-brand-950/40 border-brand-500 shadow-md scale-[1.01]";
+        btn2.className = "w-full p-4 rounded-xl text-left border transition-all duration-155 cursor-pointer bg-slate-950 hover:bg-slate-900 border-slate-850";
+        
+        // TBL ethical inputs
+        state.vFin = 40;
+        state.vSoc = 120;
+        state.vEnv = 90;
+        state.iTot = 100;
+      } else {
+        btn1.className = "w-full p-4 rounded-xl text-left border transition-all duration-155 cursor-pointer bg-slate-950 hover:bg-slate-900 border-slate-850";
+        btn2.className = "w-full p-4 rounded-xl text-left border transition-all duration-155 cursor-pointer bg-red-950/20 border-red-500/40 shadow-md scale-[1.01]";
+        
+        // TBL profit focused inputs
+        state.vFin = 150;
+        state.vSoc = 10;
+        state.vEnv = 5;
+        state.iTot = 110;
+      }
+
+      // Sync slider states
+      document.getElementById('sld-vfin').value = state.vFin;
+      document.getElementById('sld-vsoc').value = state.vSoc;
+      document.getElementById('sld-venv').value = state.vEnv;
+      document.getElementById('sld-itot').value = state.iTot;
+
+      // Reveal visual feedback board
+      document.getElementById('case-a-feedback').classList.remove('hidden');
+      
+      translateEntireDOM();
+      updateCalculations();
+    }
+
+    // CASE STUDY B: Decision actions
+    function selectPathB(choice) {
+      state.selectedGridAction = choice;
+      
+      const btn1 = document.getElementById('btn-path-b1');
+      const btn2 = document.getElementById('btn-path-b2');
+      if (choice === 'solar') {
+        btn1.className = "w-full p-4 rounded-xl text-left border transition-all duration-155 cursor-pointer bg-brand-950/40 border-brand-500 shadow-md scale-[1.01]";
+        btn2.className = "w-full p-4 rounded-xl text-left border transition-all duration-155 cursor-pointer bg-slate-950 hover:bg-slate-900 border-slate-850";
+        
+        // Solar parameters
+        state.eEmbed = 220;
+        state.eSavings = 75;
+        state.eMaint = 10;
+      } else {
+        btn1.className = "w-full p-4 rounded-xl text-left border transition-all duration-155 cursor-pointer bg-slate-950 hover:bg-slate-900 border-slate-850";
+        btn2.className = "w-full p-4 rounded-xl text-left border transition-all duration-155 cursor-pointer bg-red-950/20 border-red-500/40 shadow-md scale-[1.01]";
+        
+        // Gas upgrade parameters
+        state.eEmbed = 450;
+        state.eSavings = 20;
+        state.eMaint = 40;
+      }
+
+      // Sync slider inputs
+      document.getElementById('sld-eembed').value = state.eEmbed;
+      document.getElementById('sld-esavings').value = state.eSavings;
+      document.getElementById('sld-emaint').value = state.eMaint;
+
+      // Reveal visual feedback board
+      document.getElementById('case-b-feedback').classList.remove('hidden');
+      
+      translateEntireDOM();
+      updateCalculations();
+    }
+
+    // SROI Slider handlers
+    function updateSroiValues() {
+      state.vFin = Number(document.getElementById('sld-vfin').value);
+      state.vSoc = Number(document.getElementById('sld-vsoc').value);
+      state.vEnv = Number(document.getElementById('sld-venv').value);
+      state.iTot = Number(document.getElementById('sld-itot').value);
+      
+      updateCalculations();
+    }
+
+    // CFA Slider handlers
+    function updateCfaValues() {
+      state.eEmbed = Number(document.getElementById('sld-eembed').value);
+      state.eSavings = Number(document.getElementById('sld-esavings').value);
+      state.eMaint = Number(document.getElementById('sld-emaint').value);
+
+      updateCalculations();
+    }
+
+    // Main calculation engine (Syncs score metrics and timelines instantly)
+    function updateCalculations() {
+      // 1. SROI calculations
+      const sroiResult = ((state.vFin + state.vSoc + state.vEnv) / state.iTot).toFixed(2);
+      
+      // Update HUD SROI Block
+      const hudSroiVal = document.getElementById('hud-sroi-val');
+      hudSroiVal.innerText = `${sroiResult}x`;
+      
+      // Update color coding based on threshold limits
+      if (Number(sroiResult) >= 1.5) {
+        hudSroiVal.className = "text-base lg:text-lg font-black font-mono leading-tight block text-brand-400";
+      } else if (Number(sroiResult) >= 1.0) {
+        hudSroiVal.className = "text-base lg:text-lg font-black font-mono leading-tight block text-amber-400";
+      } else {
+        hudSroiVal.className = "text-base lg:text-lg font-black font-mono leading-tight block text-red-400 animate-pulse";
+      }
+
+      // Update Formula board numerical outputs
+      document.getElementById('eq-sroi-vfin').innerText = `$${state.vFin}M`;
+      document.getElementById('eq-sroi-vsoc').innerText = `$${state.vSoc}M`;
+      document.getElementById('eq-sroi-venv').innerText = `$${state.vEnv}M`;
+      document.getElementById('eq-sroi-itot').innerText = `$${state.iTot}M`;
+      document.getElementById('card-sroi-out').innerText = `${sroiResult}x`;
+      document.getElementById('card-sroi-out').className = `text-3xl lg:text-4xl font-black font-mono tracking-tight block ${Number(sroiResult) >= 1.5 ? 'text-brand-400' : Number(sroiResult) >= 1.0 ? 'text-amber-400' : 'text-red-400 animate-pulse'}`;
+
+      // Update Slider numeric labels
+      document.getElementById('val-sld-vfin').innerText = `$${state.vFin}M`;
+      document.getElementById('val-sld-vsoc').innerText = `$${state.vSoc}M`;
+      document.getElementById('val-sld-venv').innerText = `$${state.vEnv}M`;
+      document.getElementById('val-sld-itot').innerText = `$${state.iTot}M`;
+
+      // Update Compliance warning cards based on current score
+      const auditCardContainer = document.getElementById('sroi-audit-card');
+      if (Number(sroiResult) >= 1.5) {
+        auditCardContainer.innerHTML = `
+          <div class="p-4 rounded-xl bg-brand-950/20 border border-brand-500/20 space-y-2.5 animate-slideUp">
+            <span class="text-xs font-bold text-brand-400 block uppercase font-mono">${t('sroiAuditExcTitle')}</span>
+            <p class="text-xs text-slate-300 leading-relaxed">${t('sroiAuditExcDesc')}</p>
+          </div>
+        `;
+      } else if (Number(sroiResult) >= 1.0) {
+        auditCardContainer.innerHTML = `
+          <div class="p-4 rounded-xl bg-amber-950/20 border border-amber-500/20 space-y-2.5 animate-slideUp">
+            <span class="text-xs font-bold text-amber-400 block uppercase font-mono">${t('sroiAuditModTitle')}</span>
+            <p class="text-xs text-slate-300 leading-relaxed">${t('sroiAuditModDesc')}</p>
+          </div>
+        `;
+      } else {
+        auditCardContainer.innerHTML = `
+          <div class="p-4 rounded-xl bg-red-950/25 border border-red-500/20 space-y-2.5 animate-pulse">
+            <span class="text-xs font-bold text-red-400 block uppercase font-mono">${t('sroiAuditFailTitle')}</span>
+            <p class="text-xs text-slate-300 leading-relaxed">${t('sroiAuditFailDesc')}</p>
+          </div>
+        `;
+      }
+
+      // 2. CFA Calculations
+      const carbonDifference = state.eSavings - state.eMaint;
+      const cfaResult = carbonDifference > 0 ? (state.eEmbed / carbonDifference).toFixed(1) : 'Infinity';
+
+      // Update HUD CFA Block
+      const hudCfaVal = document.getElementById('hud-cfa-val');
+      if (cfaResult === 'Infinity') {
+        hudCfaVal.innerText = t('never');
+        hudCfaVal.className = "text-base lg:text-lg font-black font-mono leading-tight block text-amber-400 animate-pulse";
+      } else {
+        hudCfaVal.innerText = `${cfaResult} ${t('yrs')}`;
+        if (Number(cfaResult) > 8.0) {
+          hudCfaVal.className = "text-base lg:text-lg font-black font-mono leading-tight block text-amber-400 animate-pulse";
+        } else {
+          hudCfaVal.className = "text-base lg:text-lg font-black font-mono leading-tight block text-brand-400";
+        }
+      }
+
+      // Update Formula board numeric labels for CFA
+      document.getElementById('eq-cfa-embed').innerText = `${state.eEmbed} tCO2e`;
+      document.getElementById('eq-cfa-diff').innerText = `(${state.eSavings} - ${state.eMaint}) tCO2e/year`;
+      document.getElementById('card-cfa-out').innerText = cfaResult === 'Infinity' ? t('never') : `${cfaResult} ${t('yrs')}`;
+      document.getElementById('card-cfa-out').className = `text-2xl lg:text-3xl font-black font-mono tracking-tight block ${cfaResult === 'Infinity' || Number(cfaResult) > 8.0 ? 'text-amber-400 animate-pulse' : 'text-brand-400'}`;
+
+      // Update Slider value displays
+      document.getElementById('val-sld-eembed').innerText = `${state.eEmbed} tCO2e`;
+      document.getElementById('val-sld-esavings').innerText = `${state.eSavings} tCO2e`;
+      document.getElementById('val-sld-emaint').innerText = `${state.eMaint} tCO2e`;
+
+      // Update Step-by-step progress Timeline bars
+      const timelineContainer = document.getElementById('cfa-timeline-container');
+      if (carbonDifference <= 0) {
+        timelineContainer.innerHTML = `
+          <div class="p-4 rounded-xl bg-red-950/25 border border-red-500/25 text-red-400 text-xs flex gap-2.5 items-start mt-3 animate-pulse">
+            <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+            <div>
+              <strong class="block mb-1">${t('cfaTrapTitle')}</strong> 
+              ${t('cfaTrapDesc')}
+            </div>
+          </div>
+        `;
+      } else {
+        timelineContainer.innerHTML = '';
+        [1, 2, 3, 4, 5, 6, 7, 8].forEach(year => {
+          const remainingDebt = Math.max(0, state.eEmbed - (year * carbonDifference));
+          const percentage = ((remainingDebt / state.eEmbed) * 100).toFixed(0);
+          
+          const barDiv = document.createElement('div');
+          barDiv.className = "flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3 text-xs";
+          barDiv.innerHTML = `
+            <span class="w-16 font-mono text-slate-400 shrink-0">${t('cfaYear')} 0${year}:</span>
+            <div class="flex-1 bg-slate-950 h-6 rounded-lg overflow-hidden border border-slate-850 relative flex items-center px-2 w-full">
+              <div 
+                class="h-full bg-gradient-to-r from-emerald-500/80 to-blue-500/80 absolute left-0 top-0 transition-all duration-300" 
+                style="width: ${percentage}%"
+              ></div>
+              <span class="relative z-10 font-mono text-[9px] lg:text-[10px] font-bold text-slate-200 ml-auto">
+                ${remainingDebt > 0 ? `${remainingDebt.toFixed(0)} tCO2e ${t('cfaLeft')} (${percentage}%)` : t('cfaAmortized')}
+              </span>
+            </div>
+          `;
+          timelineContainer.appendChild(barDiv);
+        });
+      }
+
+      // Reformat dynamic display Math formulas targets
+      updateDynamicEquations();
+    }
+
+    // Dynamic LaTeX formatting updates
+    function updateDynamicEquations() {
+      const sroiResult = ((state.vFin + state.vSoc + state.vEnv) / state.iTot).toFixed(2);
+      const carbonDifference = state.eSavings - state.eMaint;
+      const cfaResult = carbonDifference > 0 ? (state.eEmbed / carbonDifference).toFixed(1) : 'Infinity';
+
+      document.getElementById('latex-sroi-formula').innerHTML = `
+        $$\\text{SROI} = \\frac{${state.vFin} + ${state.vSoc} + ${state.vEnv}}{${state.iTot}} = ${sroiResult}x$$
+      `;
+
+      if(carbonDifference <= 0) {
+        document.getElementById('latex-cfa-formula').innerHTML = `
+          $$\\text{CFA} = \\frac{${state.eEmbed}}{${state.eSavings} - ${state.eMaint}} = \\infty \\text{ (${t('never')})}$$
+        `;
+      } else {
+        document.getElementById('latex-cfa-formula').innerHTML = `
+          $$\\text{CFA} = \\frac{${state.eEmbed}}{${state.eSavings} - ${state.eMaint}} = ${cfaResult} \\text{ ${t('yrs')}}$$
+        `;
+      }
+
+      // Re-trigger visual LaTeX engines
+      if (window.MathJax && window.MathJax.typesetPromise) {
+        window.MathJax.typesetPromise().catch(err => {});
+      }
+    }
+
+    function renderCOICheatsheet() {
+      const grid = document.getElementById('cheat-grid');
+      grid.innerHTML = `
+        <div class="p-4 bg-slate-900 rounded-xl border border-slate-800 space-y-1.5">
+          <span class="font-bold text-slate-200 block text-xs lg:text-sm">${t('cheat1Title')}</span>
+          <p class="text-slate-400 mt-1 leading-relaxed text-[11px] lg:text-xs">${t('cheat1Desc')}</p>
+        </div>
+        <div class="p-4 bg-slate-900 rounded-xl border border-slate-800 space-y-1.5">
+          <span class="font-bold text-slate-200 block text-xs lg:text-sm">${t('cheat2Title')}</span>
+          <p class="text-slate-400 mt-1 leading-relaxed text-[11px] lg:text-xs">${t('cheat2Desc')}</p>
+        </div>
+        <div class="p-4 bg-slate-900 rounded-xl border border-slate-800 space-y-1.5">
+          <span class="font-bold text-slate-200 block text-xs lg:text-sm">${t('cheat3Title')}</span>
+          <p class="text-slate-400 mt-1 leading-relaxed text-[11px] lg:text-xs">${t('cheat3Desc')}</p>
+        </div>
+        <div class="p-4 bg-slate-900 rounded-xl border border-slate-800 space-y-1.5">
+          <span class="font-bold text-slate-200 block text-xs lg:text-sm">${t('cheat4Title')}</span>
+          <p class="text-slate-400 mt-1 leading-relaxed text-[11px] lg:text-xs">${t('cheat4Desc')}</p>
+        </div>
+      `;
+    }
+
+    // Global print trigger
+    function triggerPrint() {
+      window.print();
+    }
+
+    // Bootstrap initial environment render on load
+    window.onload = function() {
+      setLanguage('en');
+      renderCOICheatsheet();
+      setTab('case');
+    }
   </script>
 </body>
 </html>
